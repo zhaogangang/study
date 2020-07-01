@@ -1,0 +1,437 @@
+mysql -u root -p 1234	// login mysql use name root and password 1234, if just key -p not a password, and will be key
+			// password by next row and it's hide
+
+upper is a command, lower is name;
+
+SHOW databases;	// show all databases in the disk
+
+USE database;	// database is a database's name, and design the database as operator object;
+
+SHOW tables;	// show all tables in the database;
+
+DESC table;	// show a table's information or use comand "show columns from table;"
+
+HELP SHOW;	// show command "show" help
+
+SHOW CREATE DATABASE database;	// show database create information
+
+SHOW CREATE TABLE table;	// show table create information
+
+SHOW GRANTS;	// show user's information or assign its name;
+
+SELECT col FROM table;	// show col in table;
+
+SELECT col1, col2, col3 FROM table;	//show col1, col2 and col3 in table;
+
+SELECT * FROM table;	// * mean to all: show all col in table;
+
+SELECT DISTINCT col1, col2 FROM table;	// DISTINCT mean all (col1 and col2) is different, DISTINCT can't to assign a solo col, it
+				// mean all col
+
+SELECT col FROM table LIMIT 5;	// only show fifth row before;	mysql row is start  from 0;
+
+SELECT col FROM table LIMIT 2, 5;	// show second row to seventh row; seventh mean second add five;
+
+SELECT col FROM database.table;	// show col from database's table;
+
+SELECT col FROM tabe ORDER BY col1;	// show col from table and sorted by col1's alphabetic; here's col and col1 can same or
+				// not
+
+SELECT col1, col2, col3 FROM table ORDER BY col1, col2;	// sorted by col1 firstly and sorted by col2;
+
+SELECT col1, col2, FROM table ORDER BY col1 DESC, col2;	// sorted with descend by col1 firstly and sorted by col2;
+
+SELECT id FROM table WHERE id = 5;	// only show rows with id = 5; warning: ORDER BY must locate after WHERE
+
+WHERE'S operator
+=		equal
+<>		not equal
+!=		not equal
+<		less
+<=		less equal
+>		greater
+>=		greater equal
+BETWEEN		betwen   
+
+SELECT name FROM table WHERE id = 'Fuese';	// 'Fuese' is not case sensitive
+
+SELECT id, name FROM table WHERE id BETWEEN 5 AND 10;	// show id greater equal 5 and less equal 10;
+
+SELECT name FROM table WHERE name IS NULL;	// show name is NULL and NULL not be matched any or matched any
+
+SELECT id, price, name FROM table WHERE id = 1003 AND price <= 10;	// show id = 1003 and price <= 10
+
+SELECT id, price FROM table WHERE id =103 OR id =103;	// show id = 102 or id = 103
+
+SELECT id, price FROM table WHERE (id = 102 or id  103) AND pricce >= 10;	// show id =102 and price >=10 or 
+								// id = 103 and price >= 10;
+
+SELECT id FROM table WHERE id IN (101, 102, 103) ORDER BY id;	// show id =101, 102, 103 and sorted by id;
+
+SELECT id FROM table WHERE id NOT IN (101, 102, 103);	// show id != 101, 102, 103;
+
+SELECT id, name FROM table WHERE name LIKE 'jet%';	// '%' mean is any characters; LIKE mean use wildcard
+
+SELECT id, name FROM table WHERE name LIKE '_ number'	// '_' mean is only one character;
+
+SELECT name FROM table WHERE name REGEXP '^100.$'	// use regular expression
+
+SELECT Concat(name, ' (', countr, ')') FROM table ORDER BY name;	// connect the name and country, example: 
+							// name (country); Concat is a func;
+
+SELECT Concat(RTrim(name), ' (', RTrim(countr), ')' FROM table;		// RTrim is a func, remove right all space;
+							// Trim: remove both side all space;
+
+SELECT Concat(RTrim(name), ' (', RTrim(country), ')') AS title FROM table;	// name a title;
+
+SELECT quantity * price AS sum FROM table;	// show title as sum, row result as quantity * prce
+
+SELECT name Upper(name) AS name_upcase FROM table;	// use func Upper translate lower to upper
+
+function		explain
+Left()		return left string
+Right()		return right string
+Locate()		find a sub string
+Length()		return length of string
+Lower()		transform string to lower
+Upper()		transform string to upper
+LTrim()		remove left space
+RTrim()		remove right space
+Trim()		remove space of both side
+Soundex()		return sound(according the syllable)
+Substring()	return substring;
+
+standard format    2019-09-01 13:53:27
+AddDate()		add a date data as day, week, month etc.
+AddTime()		add a time data as hour, minute, second etc.
+CurDate()		return current day;
+CurTime()		return current time;
+Date()		return date in datedata and timedata
+DateDiff()		difficult two date
+Date_add()	hight precision date add func
+Date_Format()	return a format datedata or timedata
+Day()		return day in datedata
+DayOfWeek()	return week in datedata
+Hour()		return hour in timedate
+Minute()		return minute in timedate
+Second()		return second in timedata
+Time()		return time in timedata
+Year()		return year in datedata
+
+Abs()		return abs number
+Cos()		return angle cos
+Exp()		return number Exp
+mod()		return number mod;
+Pi()		return pi
+Rand()		return random
+Sin()		return angle sin
+Sqrt()		return number sqrt
+Tan()		return angle tan
+
+AVG()		return average	// ignore value is NULL
+SELECT AVG(price) AS avg_price FROM table;
+COUNT()		return col's number	// don't ignore value is NULL when * is argument
+SELECT COUNT(*) AS num_cust FROM table;
+MAX()		return max value in the col;
+SELECT MAX(price) AS max_price FROM table;
+MIN()		return min value in the col;
+SELECT MIN(price) AS min_price FROM table;
+SUM()		return sum value in the col;	// ignore value is NULL
+SELECT SUM(quantity) AS iterm_sum FROM table;
+
+
+SELECT name FROM table WHERE Soundex(name) = Soundex('lie')	// show name row is lee
+
+SELECT AVG(DISTINCT price) AS avg_price FROM table;	// all equal value as a single value
+
+SELECT id, COUNT(*) AS num_prods FROM table GROUP BY id WITH ROLLUP;	// count each id number; GROUP BY must be
+				 // ORDER BY before and WHERE after, WITH ROLLUP mean sum each row
+
+SELECT id COUNT(*) AS num_prods FROM table GROUP BY id HAVING COUNT(*) >= 3;	// as same as above, HAVING mean
+			// as same WHERE, bur WHERE don't use in group (HAVING can replace WHERE in any way)
+
+SELECT id FROM customers WHERE id IN 		// subquery
+	(SELECT id FROM orders WHERE num IN 
+	(SELECT num FROM orderitems WHERE id = 'TNT2'));
+
+SELECT id, state, (SELECT COUNT(*) FROM orders WHERE orders.id = customers.id)	// if id is same in two database
+	AS orders	FROM customers ORDER BY id;				// indicate the database
+
+SELECT vend_name, prod_name, prod_price 		// join two table with foreign key, if not foreight key
+	FROM vendors, products WHERE vendors.vend_id = products.vend_id 	// show cartesian product
+	ORDER BY vend_name, prod_name;
+SELECT vend_name, prod_name, prod_price		// as same as above, this method is recommend;
+	FROM vendors INNER JOIN products ON vendors.vend_id = products.vend_id;
+
+SELECT p1.prod_id, p1.prod_name FROM products AS p1, products AS P2		// use alias
+	WHERE p1.vend_id = p2.vend_id AND p2.prod_id = 'DTNTR';
+
+SELECT cust_name, orders.* from customers, orders where customers.cust_id = orders.cust_id;	
+							// same name col in two table only show one times
+
+SELECT customers.cust_id, orders.order_num		// show no related row in OUTER JOIN left table in two tables;
+	FROM customers LEFT OUTER JOIN orders	// use RIGHT OUTER JOIN mean OUTER JOIN right table(orders);
+	ON customers.cust_id = orders.cust_id;
+
+SELECT vend_id, prod_id, prod_price		// show two table with UNION, erase repeat row; use UNION ALL show all
+	FROM products WHERE prod_price <= 5	// row include repeat row;
+	UNION
+	SELECT vend_id, prod_id, prod_price
+	FROM products WHERE vend_id IN (1001, 1002);
+
+CREATE TABLE productnotes
+(
+	node_id 	int	NOT NULL AUTO_INCREMENT,
+	prod_id	char(10)	NOT NULL,
+	note_text 	text	NULL,
+	PRIMARY KEY(note_id),
+	FULLTEXT(note_text)			// only create FULLTEXT, then use grep
+) ENGINE = MyISAM;			// only engine myisam use grep, innodb not support;
+
+SELECT note_text FROM productnotes		// grep full text, if have string('rabbit'), and show it;
+	WHERE Match(note_text) Against('rabbit');
+
+SELECT note_text Match(note_text) Against('rabbit') As rank FROM productnotes;	// show as above, but show all row, ranked by 
+								// 'rabbit' times
+
+SELECT note_text FROM productnotes 	// show matched 'anvils' and expansioned with the matched row have some same word
+	WHERE Match(note_text) Against('anvils' WITH QUERY EXPANSION);
+
+SELECT note_text FROM productnotes 		// grep with bool mode; needn't be MyISAM engine, this mode is low efficiency
+	WHERE Match(note_text) Against('heavy -rope*' IN BOOLEAN MODE);
+
+operator	explain
++	includes(default)
+-	exclude
+>	include and add rank grade
+<	include and minut rank grade
+()	substring
+~	cancel a word rank
+*	wordtailer
+""	define a line as word
+
+INSERT INTO table			// insert value into table not use data type, this not is security
+VALUES(	'id',			// value sequence as same as table;
+	'country');
+
+INSERT INTO table(name,		// insert value into table with the data type, this is security but fussy
+	country)			// value sequence not as same as table, because assign the data type;
+VALUES(	'name',			// can omit some value and set to NULL, if is set grant NULL;
+	'country');
+
+INSERT LOW_PRIORITY INTO table(name,		// lower the insert word priority
+	country)				// if insert more values, omit the INSERT INTO;
+VALUES(	'name1',
+	'country1),
+	('name2',
+	'country2');
+
+INSERT INTO table(name,
+	country)
+	SELECT name,			// insert into table with SELECT result
+		country
+	FROM custnew;
+
+UPDATE table SET name = 'name' WHERE id = 101;	// update name as 'name' in table id = 101 row
+
+UPDATE IGNORE table SET name = 'name', country = 'country' WHERE id = 101;	// IGNORE mean ignore error and continue
+					// if not IGNORE, UPDATE do nothing by occur error;
+
+DELETE FROM table WHERE id = 101;		// delete id = 101 row in table; delete can't delete the table, just delete row
+
+TRUNCATE table;			// delete all table's row and create a new empty table, the command prior delete;
+
+CREATE TABLE table			// table distinguish upper and lower, create a table have repeat is error, just use
+(				// NOT EXISTS
+
+ id	int	NOT NULL AUTO_INCREMENT,		// auto_increment is a auto increment the id value;
+ name	char(50)	NOT NULL,			// musn't NULL
+ price	double	NOT NULL DEFAULT 1,		// default is 1
+PRIMARY KEY (id)					// primary key
+) ENGINE=InnoDB;
+
+ALTER TABLE table ADD PRIMARY KEY(id);		// add id as a key
+
+ALTER TABLE table MODIFY id int not null auto_increment;	// make id auto_increment;
+
+ALTER TABLE table MODIFY id int not null;		// remove id auto_increment;
+
+ALTER TABLE table CHANGE name name1 varchar(128);	// change column name
+
+ALTER TABLE table DROP primary key;			// remove id key;
+
+ALTER TABLE table DROP name;			// remove name's col;
+
+ALTER TABLE table ADD name varchar(20) not null;		// add a name col as varchar(20), musn't null
+
+ALTER TABLE table ADD INDEX index_name (name);		// add a index
+
+ALTER TABLE table ADD UNIQUE (name);			// add unique index
+
+ALTER TABLE table DROP INDEX index_name;		// delete a index
+
+DROP TABLE table;					// delete table;
+
+RENAME TABLE table1 TO table2;			// rename table1 to table2;
+
+CREATE OR REPLACE VIEW view AS SELECT name, id, addr FROM table1, table2 WHERE table1.id = table2.id;	
+				// create a view;
+				// view is a base table(relate table) and can do table can do add affected  origin table
+
+DELIMITER //			// change the system final sig as '//', becuase the procedure as result as ;
+
+-- name:ordertotal
+-- parameters: onumver = order number
+--	       taxable = 0 if not taxable, 1 if taxable
+--	       ototal = order total variable
+CREATE PROCEDURE ordertotal(		// procedure similar func
+	IN onumber INT,			// IN as parameter, OUT as return
+	IN taxable BOOLEAN,
+	OUT ototal DECIMAL(8,2)		// decimal 
+) COMMENT 'Obtain order total, optionally adding tax'	// a comment the procedure
+BEGIN
+	-- Declare variable for total			// -- is a displain
+	DECLARE total DECIMAL(8,2);			// declare a variable
+	-- Declare tax percentage
+	DECLARE taxrate INT DEFAULT 6;		// assignment
+
+	-- Get the order total
+	SELECT Sum(item_price * quantity)
+	FROM orderitems
+	WHERE order_num = onumber
+	INTO total;
+
+	-- Is this taaxable?
+	IF taxable THEN				// if then
+		-- Yes, so add taxrate to the total
+		SELECT total + (total / 100 * taxrate ) INTO total;
+	END IF;					// end if
+	-- And finally, save to out variable
+	SELECT total INTO ototal;
+END;						// end procedure
+
+DELIMITE ;		// change the system final sign as ;
+
+CALL ordertotal(20004, 0, @total);			// call a procedure
+
+DROP PROCEDURE IF EXISTS procedure;			// delete a procedure;
+
+SHOW CREATE PROCEDURE procecure;			// show procedure a information
+
+SHOW PROCEDURE STATUS;				// show all procedure information;
+
+SHOW PROCEDURE STATUS LIKE 'procedure';		// show procedure 'procedure' information;
+
+CREATE PROCEDURE processorders()			// cursor just define in the procedure
+BEGIN
+	-- Declare local variables
+	DECLARE done BOOLEAN DEAFAULT 0;
+	DECLARE o INT;
+	DECLARE t DECIMAL(8,2);
+
+	-- Declare the cursor
+	DECLARE ordernumbers CURSOR
+	FOR
+	SELECT order_num FROM orders;
+	--Declare continue handler
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done = 1;
+	
+	--Create a table to store the results
+	CREATE TABLE IF NOT EXISTS ordertotals
+	(order_num INT, total DECIMAL(8,2);
+
+	--Open the cursor
+	OPEN ordernumbers;
+	
+	-- Loop through all rows
+	REPEAT
+		-- Get order number
+		FETCH ordernumbers INTO o;
+
+		-- Get the total for this order
+		CALL ordertotal(0, 1, t);			// Call a procedure
+
+		-- Insert order and total into ordertotals
+		INSERT INTO ordertotals(order_num, total)
+		VALUES(o, t);
+	--End of loop
+	UNTIL done END REPEAT;
+
+	-- Close the cursor
+	CLOSE ordernumbers;
+END;
+
+CREATE TRIGGER newone AFTER INSERT ON table FOR EACH ROW SELECT 'insert one';	// declare a trigger newone, and
+		// each insert a one will be display 'insert one';
+		// trigger altogather is six, each INSERT, DELETE, UPDATE have two trigger with before and after
+
+DROP TRIGGER nweone;
+
+CREATE TRIGGER newone AFTER INSERT ON table FRO EACH ROW SELECT NEW.id;		// each insert succeed will be display
+									// this row's id;
+
+CREATE TRIGGER deleteone BEFORE DELETE ON table FOR EACH ROW	// create a trigger deleteone; restore the old data to
+BEGIN							// archive_table and delete the OLD data;
+	INSERT INTO archive_table(id, name, addr)
+	VALUES(OLD.id, OLD.name, OLD.addr);
+END;
+
+CREATE TRIGGER update BEFORE UPDATE ON table FOR EACH ROW 	// create a trigger updateone; chech the name if upper
+SET NEW.name = Uper(NEW.name);			// insert, or do nothing; update trigger supper NEW and OLD
+
+START TRANSACTION;		// create a transaction
+DELETE FROM table;			// delete table data
+SELET * FROM table;			// data is empty
+ROLLBACK;			// back to start
+SELET * FROM table;			// data is restore
+
+START TRANSACTION;		// start transaction; must be design, if use transaction
+DELETE FROM table1;		// operator 1
+DELETE FROM table2;		// operator 2
+COMMIT;				// if each operator error, restore the data, if two operator succeed, the data is removed;
+
+SAVEPOINT delete1;			// create a savepoint delete1;
+ROLLBACK TO delete1;		// restore to savepoint delete1 and release dalete1;
+
+RELEASE SAVEPOINT delete1;		// explicit releat delte1;
+
+SHOW CHARACTER SET;		// show all character;
+
+SHOW COLLATION;			// show collation;
+
+SHOW VARIABLES LIKE 'character%';	// show current character
+
+SHOW VARIABLES LIKE 'collation%';	// show current collation
+
+CREATE TABLE table			
+(
+	id	INT,
+	name	VARCHAR(10) CHARACTER SET latin1 COLLATE latin1_general_ci	// assign a character and collation
+) DEFAULT CHARACTER SET hebrew COLLATE hebrew_general_ci;		// assign all character and collation
+
+SELECT * FROM name ORDER BY lastname, firstname COLLATE latin1_general_cs;	// temp distinguish the case
+
+CREATE USER 'guest'@'localhost' IDENTIFIED BY 'password';	// create a host
+
+RENAME USER guest TO guest1;			// rename a user's name
+
+DROP USER guset@localhost;				// delete  localhost guest;
+
+SHOW GRANTS FOR guest;				// show grants to guset;
+
+GRANT SELECT ON  mydb.* TO guset;			// grant select on mydb all table;
+
+REVOKE SELECT ON mydb.* FROM guest;			// revoke select on mydb all table;
+	
+GRANT ALL ON mydb.* to guest;			// grant all privilege on mydb all table;
+
+REVOKE ALL ON mydb.* FROM guset;			// revoke all privvilege on mydb. all table;
+
+GRANT ALL ON mydb.table to guest;			// grant all privilege on mydb database with table
+
+SET PASSWORD FOR guset = Password('password');		// modify guest password;
+
+SET PASSWORD = Password('password');			// modify password myself;
+
+
+

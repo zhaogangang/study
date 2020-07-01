@@ -1,0 +1,9 @@
+#!/usr/local/bin/lua
+function test()
+    local function intest()
+        print "intest"
+    end
+    intest()
+end
+
+test()

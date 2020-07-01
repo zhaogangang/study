@@ -1,0 +1,2213 @@
+File color:
+blue:	 	dir
+green:		exe
+red:		zip
+light blue:	obj
+flash red:	obj error
+gray:		other
+yellow:		dev
+
+WildCard:
+*		any characters
+?		any single character
+[characters]	any character that is a member of the set characters
+[!characters] 	any character that is not a member if the set charatcers
+[[:class:]]	any character that is a member of the specified class.like
+this:
+[:alum:]	any alphanumeric character
+[:alpha:]	any alphabetic charater
+[:digit:] 	any numeral
+[:lower:]	any lowercase letter
+[:upper:]	any uppercase letter
+
+ls:
+-a	list all file
+-d	if a directory is specified, ls will list the contents of the directory.
+-F	apened an indicator character to the end of each list name
+-h	in long format listing, display file size in huam-readable
+-r	display the results in reverse order
+-S	sort result by file size
+-t	sort by modification time
+-l	display results in long format
+
+less:
+PAGE UP or b 		Scroll back one page
+PAGE DOWN or Spacebar	Scroll forward one page
+UP Arrow		Scroll up one line
+Down Arrow		Scroll down one line
+G			Move to the end of the text file
+1G or g			Move to the begining of the text file
+/characters		Search forward to the next occurrence of charaters
+n			Search for the next occurrence of the previous search
+h 			Display helo screen
+q 			Quit less
+
+Standard Input, Output, Error:
+0	input:		ls -l /bin/usr 
+1	output:		ls -l /bin/usr > ls-output.txt
+2	error:		ls -l /bin/usr > ls-output.txt
+1&2	error&output:	old:	ls -l /bin/usr > ls-output.txt 2>&1
+			new:	ls -l /bin/usr &> ls-output.txt
+if we don't want output from a command-we just want to throw ia away
+for example:		ls -l /bin/usr 2> /dev/null
+
+ln:
+create hard link
+ln file link
+
+create symbol link
+ln -s item link		item may be file or direction
+
+cat:
+you can use it to display files without paging. for example
+cat ls-output.txt		will display the contents of the file ls-output.txt
+cat movie.mpeg.0* > movie.mpeg:	we could join them with this command
+cat		it reads from standard input,it's waiting for us to type something
+next,type CTRL-D to tell cat that is had reached end-of-file(EOF) on standard input
+in the absence of filename arguments, cat copies standard input to standard output
+cat > lazy_dog.txt
+input context(from keyboard):	the quick brown fox jumped over the lazy dog
+create a file called lazy_dog.txt containing the text in out example
+Option	Description
+-A	Show-all, used to display non-printing characers in the text.
+-n	Number all output lines
+-s	suppress repeated empty output lines
+
+Pipelines:
+command1 | command2:		using the pipe operator |(vertical bar), the standard
+output of one command can be piped into the standard input of another
+ls /bin /usr/bin | sort | less
+the output of ls would have consisted of two sorted lists, one for each directory.
+by including sort in our pipeline, we changed the data to produce a single, 
+sorted list
+
+sort:
+Option	Description
+-b	By default, sorting is performed on the entire line, starting with the first character in the line.
+-f	Makes sorting case insensitive.
+-n	Performs sorting based on the numeric evaluation of a string.
+-r	Sort in reverse order.
+-k	Sort based on a key field located from field1 to field2 rather than the entire line.
+-m	Treat each argument as the name of a presorted file. Merge multiple files into a single sorted 
+	result without performing any additional sorting
+-o	Send sorted output to file rather than to standard output.
+-t	Define the field-separator character. By default, fields are separated by spaces or tabs.
+for example:
+du -s /usr/share/* | head -n 3		//du command used to estimate file space usage
+8	/usr/share/aclocal
+1300	/usr/share/alsa
+628	/usr/share/anaconda
+du -s /usr/share/* | sort -nr | head -n 3
+96340	/usr/share/localef
+38132	/usr/share/doc
+25188	/usr/share/vim
+ls -l /usr/bin | sort -nr -k 5,6 | head -n 3		//each field as such the file attributes, link count, filename,
+-rwxr-xr-x. 1 root root 5354296 Oct 30 17:55 ld.gold	//file size and so on. 5,6 means "start at field 5 and end filed
+-rwxr-xr-x. 1 root root 3178200 Oct 30 17:55 dwp	//6". if no range is specified, sort will from a key to the end of
+-rexr-xr-x. 1 root root 2294208 Oct 31 03:57 vim	//the line.
+ls -l /usr/bin | sort -k 5.3nbr | head -n 3		//5.3 means "fifth field and third char. nbr eqaul -nbr in the -k
+-rwxr-xr-x. 1 root root 2294208 Oct 31 03:57 vim	//option. and b is ignore leading spaces.(spaces and char consist
+-rwxr-xr-x. 1 root root 3178200 Oct 30 17:55 dwp	//of the field)
+-rwxr-xr-x. 1 root root 1062640 Nov 9 08:58 grubZ-fstest
+sort -t ':' -k 7 /etc/passwd | head -n 3		//-t option delimited with colons(:)
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+
+uniq:
+ls /bin /usr/bin | sort | uniq | less		remove any duplicates from the
+output of the sort command
+ls /bin /usr/bin | sort | uniq -d | less	only see the list of duplicate
+Option	Description
+-c	Output a list of duplicate lines preceded by the number of times the line occurs.
+-d	Output only repeated lines, rather than unique lines.
+-fn	Ignore n leading fields in each line. Fileds are separated by whitespace as they 
+	are in sort; however, unlike sort, uniq has no option for setting on alternative field separator.
+-i	Ignore case during the line comparisons.
+-sn	Skip (ignore) the leading n characters of each line.
+-u	Output only unique lines. This is the default.
+
+wc:
+the wc(word count) command is used to display the number of lines, words, and
+bytes contained in files.for example:
+wc ls-output.txt
+7902	64566	503634	ls-output.txt
+[option]:
+-l		print the line counts
+-w		print the word counts
+-c		print the byte counts
+grep:
+when grep encounters a "pattern" in the file, it prints out the lines containing
+it.
+[option]:
+-i		which causes grep to ignore case
+-v		which tells grep to print only lines that do not match the pattern
+
+head:
+prints the first 10 lines of a file or can be adjusted with the -n option:
+head -n 5 ls_output.txt
+display first 5 lines of the ls_output.txt
+tail:
+as above
+or
+tail -f /var/log/messages
+using the -f option, tail continues to monitor the file and when new lines are 
+appended, they immediately appear on the display. this continues until you type
+CTRL-C
+tee:
+this time including tee to capture the entire directory listing to the file ls.txt
+before grep filters the pipeline's contents:
+ls /usr/bin | tee ls.txt | grep zip
+gpg-zip
+gunzip
+gzip
+
+echo:
+it print out its text arguments on standard output
+for example:
+echo this is a test
+this is a test
+echo *
+Desktop Documents ls-out.txt Music Pictures Public Templates Vedios
+
+$((expression)):
+the shell allows arithmetic to be performed by expansion.
+arithmetic:
++, -, *, /, %:
+echo $((2+2))
+**:
+echo $((4**3))
+64
+echo $((3**3))
+27
+echo $(($((3**2))*3))
+27
+or:
+echo $((3**2*3))
+27
+or:
+echo $(((3+2)*2))
+10
+brace expansion:
+with it, you can create multiple text string from a pattern containing braces
+here's an example:
+echo Front-{A,B,C}-Back
+Front-A-Back Front-B-Back Front-C-Back
+echo Number_{1..3}
+Number_1 Number_2 Number_3
+echo {Z..T}
+Z Y X W V U T
+echo a{A{1,2},B{3,4}}b
+aA1b aA2b aB3b aB4b
+to invoke parameter expansion and reveal the contents of USER, you would do this:
+echo $USER
+guest
+
+command subsitution allows us to use the output of a command as an expansion:
+echo $(ls)
+Desktop Documents Musiz Pictures Public Templates Videos
+ls -l $(which cp)
+-rwxr-xr-x 1 root root 71516 2012-12-05 08:58 /bin/cp
+
+uses back quotes instead of the dollar sign and paretheses:
+ls -l `which cp`
+-rwxr-xr-x 1 root root 71516 2012-12-05 08:58 /bin/cp
+Double Quotes
+all the special charaters used by the shell lose their spacial meaning and are treated 
+as ordinary characters.the exceptions are $(dollar sign),\(backslash),and`(back tick).
+for example:
+echo "$USER $((2+2))"
+guest 4
+echo "this is a   test"
+this is a   test
+Single Quotes:
+suppress all expansions
+for example:
+echo '{1,2} $((4+4)) $USER'
+{1,2} $((4+4) $USER
+Escaping Characters
+quote only a single character.
+echo "the price is \$4"
+the price is $4
+echo -e "hello\tworld"
+hello	world
+echo -e "hello\nworld"
+hello
+world
+
+Cursor Movement:
+Ctrl-A		Move cursor to the begining of the line
+Ctrl-E		Move curosr to the end of the line
+Ctrl-F		Move cursor forward one character; same as the right arrow key
+Ctrl-B		Move cursor backward one charater; same as the left arrow key
+Alt-F		Move cursor forwad one word
+Alt-b		move cursor backward one word
+Ctrl-L		Clear the screen and move the cursor to the top left corner.
+		The clear command does the same thing
+Ctrl-D		Delete the character of the cursor location
+Ctrl-T		Transpose(exchange) the character of the cursor location with
+		the one preceding it
+Alt-T		Transpose the word at the cursor location with the one preceding it
+Alt-L		Convert the characters from the cursor location to the end of the word
+		to lowercase
+Alt-U		Convert the characters from the cursor location to the end of the word
+		to uppercase
+Ctrl-K		Kill text from the cursor location to the end of line
+Ctrl-U		Kill text from the cursor location to the beginging of the line
+Alt-D		Kill text from the cursor location to the end of the current word
+Alt-Backspace	Kill text from the cursor location to the beginging of the current word.
+		if the cursor is at the beginning of a word, kill the previous word
+Ctrl-Y		Yank text from the kill-ring and insert it at the cursor location, if 
+		continue press Alt-Y, current kill-ring convert the last kill-ring
+Completion:
+Completion occurs when you press the TAB key while typinga command
+Try typing the following but don't press the ENTER key
+ls l
+Now press the TAB key
+ls ls-output.txt
+Try typing the following but don't press the ENTER key
+ls D
+Now press the TAB key
+ls Documents
+By pressing the TAB key a second, display list of possible competions
+Alt-*		insert all possible completions.
+
+History:
+we can view the contents of the history list
+First press Ctrl-R
+(reverse-i-search)`':
+next, we start typing our search text, which in this example is /usr/bin
+(reverse-i-search)`/usr/bin': ls -l /usr/bin
+now we can execute the command by pressing ENTER or we can copy the command to our
+current command line for further editing by pressing Ctrl-J.let's copy it
+ls -l /usr/bin
+Ctrl-P		Move to the previous history entry. same action as the up arrow
+Ctrl-N		Move to the next history entry. same action as the down arrow
+Alt-<		Move to the beginning(top) of the history list
+Alt->		Move to the end(bottom) of the history list;the current command line
+Ctrl-R		Reverse incremental search
+Ctrl-P		Reverse search, non-incremental.
+Ctrl-N		Forward search, non-incremental
+Ctrl-O		Execute the current item and advance to the next one
+!number		Repeat history list item number
+!string		Repeat last history list item starting with string
+!?string 	Repeat last history list item containing string
+
+id:
+find out information about your identity
+> foo.txt = touch foo.txt
+Attibute	File Type
+-		A regular file
+d		A directory
+l		A symbolic lik. Notice that with symbolic links, the remaining files 
+		attributes are always rwxrwxrwx and are dummy values. the real file 
+		attributes are those of the file the symbolic link points to.
+c		A character special file. this file type refers to a device that handles
+		data as a stream of bytes, such as a terminal or modem
+b		A block special file. this file type refers to a device that handles
+		such as a hard drive or CD-ROM drive
+Symbol		Meaning
+u		Short for user but means the file or directory owner
+g		Group owner
+o		Short for others but means world
+a		Short for all; the combination of u, g, and o
+Notation	Meaning
+u+x		Add execute permimssion for the owner
+u-x		Remove execute permission from the owner
++x		Add execute permission for the owner, group, and world.
+u+x,go=rx	Add execute permission for the owner and set the permission for the group 
+		and others to read and execute.
+if no character is specified, all will be assumed, for example:
+chmod = foo.txt
+----------. 1 guest guest - Dec 8 20:45 foo.txt
+special instance:
+chmod =rwx foo.txt OR chmod +rwx foo.txt
+-rwxrwxr-x. 1 guest guest - Dec 8 20:45 foo.txt
+chmod a=rwx foo.txt OR chmod a+rex foo.txt
+-rwxrwxrwx. 1 guest guest - Dec 8 20:45 foo.txt
+umask:
+the umask command controls the default permissions given to a file when it is created
+umask
+0002
+> foo.txt
+ls -l foo.txt
+-rw-rw-r-- 1 guest guest ...
+mkdir test
+ls -l
+drwxrwxr-x 1 guest guest ...
+chmod u+s program(executable file) OR chmod 4755 program	(and the program must executable, or -rwSr-xr-x(no value) 
+-rwsr-xr-x
+chmod u+s dir	OR chmod 2755		shared directory when members of a common group need 
+drwxr-sr-w				access to all the files in the directory
+chmod +t dir	OR chmod 1777		all user can write within the directory, but either oneself or file owner delete it
+drwxrwxrwt./a.	
+
+su [user]
+start a shell as another user, if no specified, default login root
+kjksu -l [user]
+as su, but the user's environment is loaded and the working directory is changed to the user's home directory
+su -c 'ls -l /root/*'		use root perform the commamd and close root, return the result in current user shell
+passwd:
+-rw------- 1 root root 
+sudo 		don't need root password, as root perform the command. but need root given privilege
+sudo -l		to see what privileges are granted by sudo
+
+chown	
+change file owner and group
+bob		Change the ownership of the file from its current owner to user bob
+bob:users	Change the ownership of the file from its current owner to user bob
+		and changes the file group owner to froup users
+:admins		Changes the group owner to the group admins. the file owner is unchanged
+bob:		Change the file owner from the current owner to user bob and changes the 
+		group owner to the login group of user bob
+
+ps:
+view processws(there are several)
+ps
+PID	TTY	TIME		CMD
+7536	tty1	00:00:00	bash
+7893	tty1	00:00:00	ps
+TTY is short for teletype and refers the the controlling for the process.
+TIME is the amount of CPU time consumed by the process.
+ps x
+PID	TTY	STAT	TIME	COMMAND
+7536	tty1	Ss	00:00	-bash
+7908	tty1 	R+	00:00	ps x
+STAT is short for state and reveal the current status of the process, as shown in follow Table
+R	Running. The process is running or ready to run.
+S	Sleeping.The process is not running; rather, it is waiting for an event, such as keystroke
+	or network packet.
+D	Uninterruptible sleep. Process is waiting for I/O such as  a disk drive.
+T	Stopped. Process has been instructed to stop(more on this later).
+Z	A defunct or "zombie" process. This is a child process that has terminated but has not been
+	cleaned up by its parent
+<	A high-priority process. it's possible to grant more importance to a process, giving it more
+	time on the CPU. this property of a process is called niceness. A process with high priority
+	is said to be less nice because it's taking more of the CPU's time, which leaves less for 
+	everybody else.
+N	A low-priority process. A process with low priority (a nice process) will get processor time
+	only after other processes with higher priority have been serviced.
+ps aux
+USER	PID	%CPU	%MEM	VSZ	RSS	TTY	STATE	START	TIME	COMMAND
+ROOT	1	0.0	0.3	127996	6544	?	Ss	03:04	0:01	/usr/lib/systemd/systemd --..
+USER	User ID. this is the owner of the process.
+%CPU	CPU usage as a percent.
+%MEM	Memory usage as a percent.
+VSZ	Virtual memroty size.
+RSS	Resident Set Size. the amount of physical memory (RAM) the process is using in kilobytes.
+START	Time when the process started. For values over 24 hours, a date is used.
+
+top
+see a more dynamic view of the machine's activity.
+top
+top - 04:17:51 up 1:13,	1 user, load average: 0.00, 0.01, 0.05
+Tasks: 100 total, 1 running, 98 sleeping, 0 stopped, 0 zombie
+%Cpu(s): 0.0 us, 0.0 sy, 0.0 ni, 99.7 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st
+Kib Mem : 1863224 total, 1545240 free, 141240 used, 176744 buff/cache
+Kib Swap: 2097148 total, 2097148 free, 0 used, 1536080 awail Mem
+top		Name of the program.
+04:17:51 	Current time of day.
+up 1:13		This is called uptime. it is the amount of time since the machine was last booted.
+1 user		One user are logged in.
+load average	Load average refers to the number of processes that are waiting to run; that is, the
+		number of processes thar are in a runnable state and are sharing the CPU. three values are
+		shown, each for a different period of time. the first is the average for the last 60 seconds,
+		the next the previous 5 minutes, and finally the previous 15 minutes. Values under 1.0 indicate
+		that the machine is not busy.
+Task		This sumarizes the number of processes and their various process states.
+0.0 us		0.0% of the CPU is being used for user processes. This means processes outside of the kernel itself.
+0.0 sy		0.0% of the CPU is being used for system(kernel) processes.
+0.0 ni		0.0% of the CPU  is being used by nice(low-priority) processes.
+99.7 id		99.7% of the CPU is idle.
+0.0 wa		0.0% of the CPU is waiting for I/O.
+Mem		Shows how physical RAM is being used.
+SWAP		Shows how swap space (virtual memory) is being used.
+
+To launch a program so that it is immediately placed in the backgroud, we follow the command with an ampersand character(&):
+less file &
+[1] 8082
+The shell is telling us that we have started job number 1([1]) and that is has PID 8082.
+
+jobs
+[1]+ stopped 		less file
+The results show that we have one job, numbered 1, that it is stopped, and that the command was less file &.
+
+fg %1
+To return a process to the foreground
+
+bg %1
+To return a process to the background
+
+kill
+It sends processes signals.
+Number	Name	Meaning
+1 	HUP	Hang up. The signal is used to indicate to programs that the controlling terminal has "huang up".
+		This signal is also used by many daemon programs to cause a reinitialization.
+2	INT	Interrupt. Performs the same funciton as the CTRL-C key sent from the terminal.
+9	KILL	Kill.the KILL signal should be used only as a last resort when other termination signals fail.
+15	TERM	Teminate.this is the default signal sent by the kill command. if a program is still "alive" enough
+		to receive signals, it will terminate.
+18	CONT	Continue. This will restore a process agter a STOP signal.
+19	STOP	Stop.	This signal causes a process to pause without terminating. Like KILL fignal, it is not sent
+		to the target process, and thus it cannot be ignored
+above are most often used with kill, next signals are frequently used by the system.
+3	QUIT	Quit.
+11	SEGV	Segmentationo violation.this signal is sent if a program makes illegal use of memory; that is, it tried
+		to write somewhere it was not allowed to.
+20	TSTP	terminal stop. This is the signal sent by the terminal when CTRL-Z is pressed. Unlike the STOP signal,
+		the TSTP signal is received by the program but the program may choose to ignore it.
+28	WINCH	Window change. This is a signal sent by the system when a window changes size. Some programs, like top and
+		less, will respond to this signal by redrawing themselves to fit the new window dimentions.
+
+killall
+It's also possible to send signals to multiple processes matching a specified program or username.
+
+More process-related commands
+pstree	Outputs a process list arranged in a tree-like pattern showing the parent/child relationships between processes.
+vmstat	Outputs a snapshot of system resource usage including memory, swap, and disk I/O.to see a continuous display,
+	follow the command with a time delay(inseconds) for updates.
+xload	A graphical program that draws a graph showing system load over time.
+tload	Similar to the xload program, but draws the graph in the terminal.
+
+printenv:
+Show environment variables.
+printenv USER
+guest
+We see a variable called USER, which contains the value guest. The printenv command can also list the value of a specific
+variable.
+
+set:
+Display both the shell and environment variable.
+
+unset:
+delete a variable or array
+e.g.:
+[guest@centos7 ~]$ foo=(a b c)
+[guest@centos7 ~]$ echo ${foo[@]}
+a b c
+[guest@centos7 ~]$ unset foo
+[guest@centos7 ~]$ echo ${foo[@]}
+
+[guest@centos7 ~]$ foo=(a b c)
+[guest@centos7 ~]$ echo ${foo[@]}
+a b c
+[guest@centos7 ~]$ unset 'foo[2]'
+[guest@centos7 ~]$ echo ${foo[@]}
+a c
+
+alias:
+One element of the environment.
+e.g.
+[guest@centos7 ~]$ alias
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+if want to add to an alias:
+e.g.
+[guest@centos7 ~]$ alias g+='g++ -std=c++11'
+[guest@centos7 ~]$ alias
+alias g+='g++ -std=c++11'
+
+delete alias g+
+[guest@centos7 ~]$ unalias g+
+
+Variable	Contents
+DISPLAY		The name of your display if you are running a graphical environment. Usually this is :O, meaning the first
+		display generated by the X server.
+EDITOR		The name of the program to be used for text editing.
+SHELL		The name of your shell program.
+HOME		The pathname of your home directory.
+LANG		Defines the charactor set and collation order of your language.
+OLD_PWD		The previous working directory.
+PAGER		The name of the program to be used for paging output. This is often set to /usr/bin/less.
+PATH		A colon-separated list of directories that are searched when you enter the name of an executable program.
+PS1		Prompt String 1. This defines the contents of your shell prompt. As we will later see, this can be extensively
+		customized.
+PWD		The current working directory.
+TERM		The name of your terminal type.	Unix-like systems support many terminal protocols; this variable sets the 
+		protocal to be used with your terminal emulator.
+TZ		Specifies your time zone. Most Unix-like systems maintain the conputer's internal clock in Coordinated Universal
+		Time (UTC) and then display the local time by applying on offset specified by this variable.
+USER		Your username.
+
+Login shells read one or more startup files, as following:
+File		Contents
+/etc/profile	A global configuration script thar applies to all users.
+~/.bash_profile	A user's personal startup file. Can be used to extend or override settings in the global configuration script.
+~/.bash_login	If ~/.bash_profile is not found, bash attempts to read this script.
+~/.profile	If neither ~/.bash_profile nor ~/.bash_login is found, bash attempts to read this file. This is the default in
+		Debian-based distributions, such as Ubuntu.
+
+Non-Loin shell sessions
+File			Contents
+/etc/bash.bashrc	A global configuration script that applies to all suers.
+~/.bashrc		A user's personal startup file. Can be used to extend or override settings in the global
+			configuration script.
+
+The ~/.bashrc file is probably the most important startup file from the ordinary user's point of view, since it is almost
+always read. Non_Login shells read it by default, and most startup files for login shells are written in such a way as to 
+read the ~/.bashrc file as well.
+
+source .bashrc		//equalent . .bashrc(dot equalente source)
+We can force bash to reread the modified .bashrc file with the command.
+
+vim:
+Key		Moves the cursor
+l		right one character
+h		left one character
+j		Down one line
+k		Up one line
+0(zero)		To the beginning og the current line
+^		To the first non-whitespac character on the current line
+$		To the end of the current line
+w		To the beginning of the next word or punctuation charater
+W		To the beginning of the next word, ignored punctuation charaters
+b		To the beginning of the previous word or punctuation character
+B		to the beginning og the previous word, ignored punctuation charaters
+Ctr-d		Down one page
+Ctr-u		Up one page
+number-gg	To line number
+G		To the last line of the file
+gg		To the first line of the file
+number-j	To move the cursor down number line.
+u		Vi will undo the last change that you made.
+Ctrl + r		Vi will replace the u comand  make it.
+a		Move cursor to the next one character and enter insert mode
+A		Move cursor to next character the end of the current line and enter insert mode
+o		The line below the current line
+O		The line above the current line  
+x		The current character
+3x		The current character and the next two characters
+dd		The current line
+2dd		The current line and the next line
+dw		From the current cursor location to the beginning of the next word
+d$		From the current cursor location to the end of the current line
+d0		From the current cursor location to the beginning of the line
+d^		From the current cursor location to the first non-whitespace character in the line
+dgg		From the current line to the first of the line
+dG		From the current line to the end of the line
+d20G		From the current line to the 20th line of the file
+yy		Current line
+5yy		The current line  and the next fort line
+yw		From the current cursor location to the beginning of the next word
+y$		From the current cursor location to the end of the current line
+y0		From the current cursor location to the beginning of the line
+y^		From the current cursor location to the first non-whitespace character in the line
+yG		From the current line to the end of the file
+y20G		From the current line to the 20th line of the file
+Ctr-e, Ctr-y	Scroll down and scroll up.
+fa		Find a char in the line and type ; repeat last time find
+*		hightlight the word same as current word and move to next eqaul word
+#		hightlight the word same as current word and move to prev equal word
+
+Visual mode command
+Key		action
+SHIFT i		insert string to the left of highlight context
+SHIFT a		insert string to the right of highlight context
+r		all highlight context will replaceed character
+c		all highlight context will replaceed string
+d		delete all highlight context
+
+An example of Global Seach-and-Replace Syntax
+Item		Meaning
+:		The colon character starts on ex command.
+%		Specifies the rance of lines for the operation. % is a shortcut meaning from the first
+		to the last line. 1,$, which means from line 1 to the last line in the file. if the range
+		of line is omitted, the operation is performed only on the current line
+s		Specifies the operation--in this case, substitution (search and replace).
+/bs/fs		The search pattern and the replacement text.
+g		This mean global. if g is omitted, only the first instance of the search string on each line is replaced
+		we can also specify a substitution command with user confirmation. by adding a c.
+for example:
+:,5s/hello/world/gc
+all hello is replaced by world in Current line to 5th in the file and each being checked by user.
+
+vi support regexpression 
+:%s/\v[[:digit:]]{1,2}/'\0'/gc
+\v mean dont need to add \ to the metacharacter, [[:digit:]] mean is a number, {1,2} mean prevous character's number is 1 to 2, \1 mean
+regexpression's substring 
+
+Replace Comfirmation Keys
+Key		Action
+y		Perform the substitution
+n		Skip this instance of the pattern
+a		Perform the substitution on this and all subsequent instances of the panttern
+q or ESC	Quit substitution
+l		Perform this substitution and the quit. Short for last.
+
+Editing Mutiple Files
+
+vi file1 file2 file3
+:bn
+To switch from one file to the next.
+:bp
+To move back to the previous file.
+:bd
+To delete buffers file
+:buffers
+1 %a	"foo.txt"			line1
+2	"ls-output.txt"			line0
+Press ENTER or type command to continue
+:buffer 2
+
+Our screen now displays the second file
+
+vi hello.c
+:e ls-output.txt		:e command(short for edit)
+:buffers
+1 #	"foo.txt"			line1
+2 %a	"ls-output.txt"			line0
+Press ENTER or type command to continue
+
+:r foo.txt
+The :r command(short for read)	inserts the specified file before the cursor position.
+:w foo1.txt
+Save an alternative version called foo1.txt 
+
+tabe-multiply tag
+:tabe file	open file or file is empty and open a new file
+:tabs	display opened tag list
+:tabc 	close current tag
+:tabn	move next tag or use gt(key g and key t in normal mode)
+:tabp	move prev tag or use gT(key g and key T in normal mode)
+:tabm 0	move to first tag
+:tabfirst 	move to first tag
+:tablast 	move to last tag
+:tabdo %s/food/drink/g	replace all tags' word food with drink
+
+
+:sp or vsp (short for vertical split)
+The screen will be splited two screens and press Ctr-w switch screen.(press Ctr-ww switch next screen)
+
+Anatomy of a Prompt
+echo $PS1
+[\u@\h \W]\$
+
+Escape Codes Used in Shell Prompts
+\a	ASCll bell. This makes the computer beep when it is encounted.
+\d	Current date in day, onth, date format; for example, "Mon May 26".
+\h	Hostname of the local machine minus the trailing domain name.
+\H	Full hostname
+\j	Number of jobs running in the current shell session
+\l	Name of the current terminal device.
+\n	a newline character
+\r	A carriage retun
+\s	Name of the shell program
+\t	Current time in 24-hour, hours:minutes:seconds fromat
+\T	Current time in 12-hour format
+\@	Current time in 12-hour, AM/PM format
+\A	Current time in 24-hour, hours:minutes format
+\u	Username of the current user
+\v	Version number of the shell
+\v	version and release numbers of the shell
+\w	Name of the current working directory
+\W	Last part of the current working directory name
+\!	History number of the current command
+\#	Number of the commands entered during this hsell session
+\$	This displays a "$" character unless you have superuser privileges. In that case, it displays a "#" instead.
+\[	This signals the start of a series of one or more non-printing characters. it is used to embed non-printing 
+	control characters thar manipulate the terminal emulator in some way, such as moving the cuusor or changing
+	text colors
+\]	This signals the end of a non-printing character sequence
+
+
+Sequence 	Text Color
+\033[0;30m	Black
+\033[0;31m	Red
+\033[0;32m	Green
+\033[0;33m	Brown
+\033[0;34m	Blue
+\033[0;35m	Purple
+\033[0;36m	Cyan
+\033[0;37m	Light Gray
+\033[1;30m	Dark Gray
+\033[1;31m	Light Gray
+\033[1;32m	Light Green
+\033[1;33m	Yellow
+\033[1;34m	Light Blue
+\033[1;35m	Light Purple
+\033[1;36m	Light Cyan
+\033[1;37m	White
+
+for example
+PS1="\]\033[0;31m\]<\u@\h \W>\$ "
+<guest@centos7 ~>$ 			display with Red Color
+
+Swquence	Background Color
+\033[0;40m	Black
+\033[0;41m	Red
+\033[0;42m	Green
+\033[0;43m	Brown
+\033[0;44m	Blue
+\033[0;45m	Purple
+\033[0;46m	Cyan
+\033[0;47m	Light Gray
+
+Escape Code	Action
+\033[l;cH	Move the cursor to line l and column c.
+\033[nA		Move the cursor up n lines.
+\033[nB		Move the cursor down n lines.
+\033[nC		Move the cursor forward n characters
+\033[nD		Move the cursor backward n characters.
+\033[2]		Clear the screen and move the cursor to the upper-left corner(line 0, column 0)
+\033[K		Clear from the cursor position to the end of the current line.
+\033[s		Store the current cursor position
+\033[u		Recall the stored cursor position.
+
+Findinng a Package in a Repository
+yum swarch search_name
+Search a yum repository for the emacs text editor
+
+rpm -i package_file
+Installed the downloaded package_file
+
+yum erase package_name
+Uinstall the package_name
+
+yum update
+Keeping the system up-to-date with the latest packages.
+
+rpm -U package_file
+Install an updated version of a package hsd been downloaded from a nonresitory source, replacing the previous version.
+
+rpm -qa
+Display a list of all the packages installed on the system.
+
+rpm -q package_name
+Display whether a specified package is intalled
+
+yum info package_name
+If the name of an installed package is known, the commands can be display a description of the package
+
+rpm -qf file_name
+Determine which package is responsible for the installation of a particular flle
+
+Mounting and Unmounting Storage Devices
+vi /etc/fstab
+/dev/mapper/centos-root 	/	xfs	defaults	0	0
+UUID=7b8e3401-..		/boot	xfs	defaults	0	0
+/dev/mapper/centos-swap		swap	swap	defaults	0	0
+
+Field	Contents	Description
+1	Device		Traditionally, this field contains the actual name of a device file associated with the physical
+			advice,	such as /dev/had1(the first partition of the master device on the first IDE channel).
+2	Mount point	The directory where the device is attached to the filesystem tree
+3	Filesystem type	Linux allows many filesystem types to be mounted.
+4	Options		Filesystems can be mounted with various options.
+5	Frequency	A single number thar specifies if and when a filesystem is to be backed up with the dump command
+6	Order		A single number that specifies in what order filesystems should be checked with the sdck command
+
+mount
+/dev/sdb1 on /mnt/flash type ext3(rw,relatime,seclabel,dataa=ordered)
+the line shows that device /dev/sdb1 is mounted as the on the /mnt/flash, is of type ext3, and is both readable and writable.
+
+sudo umount /dev/sdb1
+mkdir /mnt/flash
+sudo mount -t ext3 /dev/sdb1 /mnt/flash
+ls
+
+Linux Storage Device Names
+Pattern		Device
+/dev/fd*	Floppy disk drives
+/dev/hd*	IDE(PATA) disks on older systems.
+/dev/lp*	Printers
+/dev/sd*	SCSI disks. On recent Linux systems, the kernel treat all disk-like devices(including PATA/SATA hard disks, 
+		flash driver, and USB mass storage devices such as portable music players and digital cameras) as SCSI disks.
+/dev/sr*	Optical drives(CD/DVD readers and burners)
+
+sudo tail -f /var/log/messages
+The last fer lines of the file will be displayed and then pause. Next, plug in the removable device. In this example, we
+will use 8Gb flash drive. Almost inmediately, the kernel will notice the device and probe it:
+jul 23 10:07:59 linuxbox kernel: sdb: sdb1
+jul 23 10:07:59 linuxbox kernel: sd 3:0:0:0: [sdb] Attached SCSI removable disk
+This tells us device name is /dev/sdb for the entire device and /dev/sdb1 for the first partition on the device.
+
+sudo mount /dev/sdb1 /mnt/flash
+df
+Filesystem	1K-blocks	Used	Available 	Use%	Mounted on
+/dev/sdb1	7561352		17292	7153304		1%	/mnt/flash
+The device name will remain the same as long as it remains physically attached to the computer and the computer is not
+reboored.
+
+sudo umount /dev/sdb1
+sudo fdisk /dev/sdb
+command (m for help):m
+command action
+a	toggle a bootable flag
+..
+x	extra functionality (experts only)
+
+sudo mkfs -t ext3 /dev/sdb1
+The program will display a lot of information when ext3 is the chosen filesystem type.
+To reformat the device to its original FAT32 filesystem, speify vfat as the filesystem type:
+sudo mkdf -t vfat /dev/sdb1
+
+sudo fsck /dev/sdb1
+Check our flash drive (which should be unmounted first)
+
+Formatting Floppy Disks
+sudo fdformat /dev/fd0
+Accomplish the formatting.
+sudo mkfs -t mddos /dev/fd0
+We use the msdos filesystem type to get the older(and smaller) style file allocation tables.
+
+Moving Data Directly to and from Devices
+dd if=imput_file of=output_file [bs=block_size [count=blocks]]
+
+Creating CD-ROM Images
+dd if=/dev/cdrom of=ubunto.iso
+
+Creating on Image from a Collection of Files
+genisoimage -o cd-rom.iso -R -J ~/cd-rom-files
+
+Writing CD-ROM Images
+mkdir /mnt/iso_image
+mount -t iso9660 -o loop image.iso /mnt/iso_image
+
+Blanking a Rewritable CD-ROM
+wodim dev=/dev/cdrw blank=fast
+
+Writing an Image
+wodim dev=/dev/cdrw image.iso
+
+Prodeces a unique hexadecimal number:
+md5sum image.iso
+23749827498ab3b242b42b4 		image.iso
+
+md5sum /dev/cdrom
+2342424242424242424251b5234		/dev/cdrom
+
+ping linuxcommand.org
+Send a Special packet to a Network Host
+
+trancepath slashdot.org
+Trace the path of a Network Packet
+
+netstat -r
+Display the kernel's network routing table. this shown how the network is configured to send packets from network to network
+
+Transfer Files with the File Transfer Protocal
+Command		Meaning
+ftp fileserver	Invoke the program and have it connect to the FTP sever fileserver.
+anonymous	Login name
+cd pub/cd_images/Ubuntu		Change to the directory on the remote system containing the desired file.
+ls		List the directory on the remote system.
+lcd Desktop	Change the directory on the local system to ~/Desktop.
+get ubuntu.iso	Tell the remote system to transfer the fule ubuntu to the local system.
+bye		Log off the remote server and end the ftp program session.
+
+lftp--A Better ftp
+Wget--Non-interactive Network Downloader
+
+ssh--securely Log in to Remote Computers
+ssh remote-sys
+Connect to a remote host named remote-sys
+
+ssh bob@remote-sys
+Connect to remote system using a different username
+
+vi ~/.ssh/known_hosts
+offending key in /home/me/.ssh/known_hosts=1
+This mean that line 1 of the known_hosts file contains the offending key. Delete this line from the file, and the ssh
+program will be able to accept new authentication credentials from the remote system.
+
+ssh remote-sys free
+We can execute the free command on a remote host named remote-sys and have the results displayed on the local system
+
+ssh remote-sys 'ls *' > dirlist.txt
+We perform an ls on the remote system and redirect the output to a file on the local system
+
+ssh remote-sys 'ls * > dirlist.txt'
+We could have placed the redirection operator and the filename within the single quotes
+
+ssh -X remote-sys
+password:
+Last login:
+xload
+Its window appears on the local system
+
+scp and sftp--Securely Transfer Files
+scp remote-sys:document.txt . 	or	 scp bob@remote-sys:document.txt .
+We wanted to copy a document named document.txt from our home directory on the remote system, remote-sys, to the
+current working directory on our local system.
+
+sftp remote-sys
+
+Find Files the Easy Way
+locate bin/zip
+/usr/bin/zip
+/usr/bin/zipcloak
+
+Find Files the Hard Way
+find ~ | wc -l
+5
+find ~ -type d | wc -l
+1
+find ~ -type f | wc -l
+4
+
+find File Types
+File Type	Description
+b		Block special device file
+c 		Character special device file
+d		Directory
+f		Regular file
+l		Symbolic link
+
+find Size Units
+Character	Unit
+b		512-byte blocks (the default if no unit is specified)
+c 		Bytes
+w		2-byte words
+k		Kilobytes (units of 1024 bytes)
+M		Megabytes (units of 1,048,576 bytes)
+G		Gigabytes (units of 1,073,741,824 bytes)
+
+find Tests
+Test		Description
+-cmin n		Match files or directories whose content or attributes were last modified exactly n minutes ago. To spacify
+		fewer than n minutes ago, use -n; to specify more than n minutes ago, use +n.
+-cnewer	file	Match files or directories whose contents or attributes were last modified more recently than those of file
+-ctime n	Match files or directoryies whose contents or attributes(i.e.,permissions) were last modified n*24 hours ago.
+-empty		Match empty files and directories.
+-gourp name	Match file or directories belonging to group name. name may be expressed as either a group name or as a 
+		numeric group ID.
+-iname pattern 	Like the -nmae test but case insensitive
+-inum n		Match files with inode number n. This is helpful for finding all the hard links to a priticular inode.
+-mmin n		Match files or directories whose contents were modifies n minutes ago.
+-mtime n	Match files or directories whose contents only were last modified n*24 hours ago.
+-name pattern	Match files and directories with the specified wildcard pattern
+-newer file	Match files and directories whose contents were modified more recently than the specified file.
+-nouser		Match file and directories thar do not belong to a valid user.
+-nogroup	Match files and directories thar do not belong to a valid group.
+-perm mode	Match files or directories that have permissions set to the specified mode.
+-samefile name	Similar to the -inum test.
+-size n		Match files of size n.
+-type c		Match files of type c
+-user name	Match files or directories belonging to name. name may be expressed by a username or by a numeric user ID.
+
+find ~ \( -type f -not -perm 0600 \) -or \( -type d -not -perm 0700 \)
+
+Operator	Description
+-a(short -and)	Match if the tests on both sides of the operator are true.
+-o(short -or)	Match if a test on either side of the operator is true.
+-!(short -not)	Match if the test following the operator is false.
+()		Groups tests and operators together to form larger expressions.
+
+Action		Description
+-delete		Delete the currently matching file.
+-ls		Perform the equivalent of ls -dils on the matching file.
+-print		Output the full pathname of the matching file to standard output.
+-quit		Quit once a match has been made.
+find ~ -print -and -type f -and -name '*.BAK'
+
+User-Defined Actions
+-exec command {} ;
+
+find ~ -type -name 'foo*' -ok ls -l '{}' ';'
+< ls ... /home/me/bin/foo > ? y
+-rwxr-xr-x 1 me me 224 	2011-10-29 18:44 /home/me/bin/foo
+< ls ... /home/me/foo.txt > ? y
+-rw-r--r-- 1 me me 0	2012-09-19 12:53 /home/me/foo.txt
+Using -ok action in place of -exec prompted before execution of each specified command.
+
+find ~ -type f -name 'foo*' -exec ls -l '{}' ';'	//equal ls -l file1
+							//	ls -l file2
+
+find ~ -type f -name 'foo*' -exec ls -l '{}' +		//equal ls -l file1 file2
+
+find ~ -type f -name 'foo*' | xargs ls -l
+
+find ~ -iname '*.jpg' -print0 | xargs -null ls -l	//handle file what have containing embedded spaces in thier names 
+
+touch
+Used to set or update the modification times of file.
+
+stat
+Reveals all that the system understands about a file and its attributes
+
+Option		Description
+-depth		Direct find to process a directory's file before the directory itself.
+-maxdepth levels	Set the maximum number of levels that find will descend into a directory tree when performing
+			tests and actions.
+-mindepth levels	Set minimum number of levels that find will descend into a directory tree before applying
+			tests and actions
+-mount		Direct find not to traverse directories that are mounted on other filesystems.
+-noleaf		Direct find not to optimize its search vased on the assumption that it is searching a Unix-like filesystem.
+
+gzip--Compress or Expand Files
+gzip foo.txt
+gunzip foo.txt
+
+Option Description
+-c	Write output to stantard output and keep original files.
+-d	Decompress.
+-f	Force compression even if a compressed version of the original file already exists.
+-h	Display usage information.
+-l	List compression statistics for each file compressed.
+-r	If one or more arguments on the command line are directories, recursively compress files contained within them.
+-t	Test the integrity of a compressed file.
+-v	Display verbose messages while compressing.
+-number	Set amount of compression. number is an integer in the range of 1 t(fastest, least compression) to 9(slowest, most
+	commpression).the defualt value is 6.
+
+bzip2--Higher Compression at the cost of speed
+bzip2 foo.txt
+bunzip2 foo.txt
+the achieves higher levels of compression at the cost of compression speed.
+
+tar--Tape Archibing Utility
+tar cf playground.tar playground
+tar cf playground.tar ~playground		//the default for pathnames is relateve, rather than absolute.
+tar xf playground.tar
+
+Mode	Description
+c	Create on archive from a list of files and/or directories.
+x	Extract an archive.
+r	Append specified pathnames to the end of an archive.
+t	List the contents of an archive
+
+tar xf playground.tar --wildcards 'home/guest/playground/dir-*/file-A'
+We ensure that tar will restore only the specified file.
+
+find playground -name 'file-A' | tar czf playground.tgz -T -
+-T:	causers tar to read its list of pathnames from a file rather than the command line.
+-:	mean standard input ot output, as needed.
+
+zip--Package and Conpress Files
+zip -r playground.zip playground
+unzip playground.zip
+unzip -l playground.zip playground/dir-099/file-Z		//extracted selectively from a zip archive by specifiying them
+
+rsync--Remote File and Directory synchronization
+rsync -av playground foo		-a:	causes recursion and preservation of file attribures
+rsync -av --delete playground foo	--delete:	remove files that may have existed on the backup device that
+							no longer existed on the source device
+sudo rsync -av --delete --rsh=ssh /etc /home /usr/local remote-sys:/backup	--rsh=ssh: appoint ssh be remove shell command
+
+grep--global regular expression print
+Option	Description
+-i	Ignore case.
+-v	invert mathch.
+-c	Print the number of matches instead of the lines themselves.
+-l	Print the name of each file that contains a match instead of the lines themselves.
+-L	Like the -l option, but print only the names of files that do not contain matches.
+-n	Prefix each matching line with the number of the line within th file.
+-h	For multifile searches, suppress the output of filenames.
+for example:
+ls dirlist*
+dirlist-bin.txt		dirlist-sbin.txt	dirlist-usr-sbin.txt	dirlist-usr-bin.txt
+grep bzip dirlist*.txt
+dirlist-bin.txt:bzip
+dirlist-bin.txt:bzip2recover
+grep -l bzip dirlist*.txt
+dirlist-bin.txt
+grep -L bzip dirlist*.txt
+dirlist-sbin.txt
+dirlist-usr-bin.txt
+dirlist-usr-sbin.txt
+
+The Any Character--.
+grep -h '.zip' dirlist*.txt
+bunzip2
+bzip2
+gunzip
+Notice that the zip program ws not found, because the inclusion of the dot metacharacter in 
+our regular expression increased the length of the required match to four characters;
+
+Caret ^ and dollar $
+grep -h '^zip' dirlist*.txt
+zip
+zipcloak
+zipgrep
+grep -h 'zip$' dirlist*.txt
+gunzip
+gzip
+funzip
+grep -h '^zip$' dirlist*.txt
+zip
+
+Bracket Expressions and Character Classes--[]
+grep -h '[bg]zip' dirlist*.txt
+bzip2
+bzip2recover
+gzip
+
+Negation--[^]
+grep -h '[^bg]zip' dirlist*.txt
+bunzip2
+gunzip
+funzip
+
+grep -h '^[A-Z]' dirlist*.txt
+MAKEDEV
+ControlPanel
+GET
+
+grep -h '^[A-Za-z0-9]' dirlist*.txt
+
+grep -h '[A-Z]' dirlist*.txt
+
+grep -h '[-AZ]' dirlist*.txt
+
+POSIX Character Classes
+Character Class	Description
+[:alnum:]	The alphanumeric characters;equivalent to [A-Za-z0-9]
+[:word:]	The same as [:alnum:], with the addition of the underscore character(_)
+[:alpha:]	The alphabetic characters; equivalent to [A-Za-z]
+[:blank:]	Include the space and tab characters
+[:cntrl:]	The ASCll control codes; includes the ASCll characters 0 through 31 and 127
+[:digit:]	The numerals 0 through 9
+[:graph:]	The visible characters; in ASCll, includes characters 33 through 126
+[:lower:]	The lowercase letters
+[:punct:]	The punctuation characters; in ASCll
+[:print:]	The printable characters; all the characters in [:graph:] plus the space character
+[:space:]	The whitespace characters including space, tab, carriage return, newline, vertical
+		tab, and form feed; in ASCll, equivalent to [ \t\r\n\v\f ]
+[:upper:]	The uppercase characters
+[:xdigit:]	Characters used to express hexadecimal numbers; in ASCll, equivalent to [0-9A-Fa-f]
+
+Alternation--|
+echo aaa | egrep 'aaa|bbb'
+aaa
+echo bbb | egrep 'aaa|bbb'
+bbb
+
+egrep -h '^(bz|gz|zip)' dir*
+gzexe
+gzip
+
+Match an Element Zero Times or One Time--?
+echo "555 123" | egrep '^\(?[0-9][0-9][0-9]\)? [0-9][0-9][0-9]$'
+555 123
+echo "(12 3" | egrep '^\(?[0-9][0-9]\)? [0-9]$'
+12 3
+
+Match an Element Zere Times or More Time--*
+match an Element One or More Times--+
+echo "This workd." | egrep '[[:upper:]][[:upper:][:lower:] ]*\.'
+This workd.
+echo "this does not" | egrep '[[:upper:]][[:upper:][:lower:] ]*\.'
+
+echo "This that" | egrep '^([[:alpha:]]+ ?)+$'
+This that
+echo "as d d" | egrep '^([[:alpha:]]+ ?)+$'
+as d d
+echo "abc  d" | egrep '^([[:alpha:]]+ ?+$'
+
+
+Match an Element a specific Number of Times--{}
+Specifier	Meaning
+{n}		Match the preceding element if it occurs exactly n times
+{n,m}		Match the preceding element if it occurs at least n times, but no more than m times.
+{n,}		Match the preceding element if it occurs n or more times
+{,m}		Match the preceding element if it occurs no more m times
+
+echo "(555) 123-4567" | egrep '^\(?[0-9]{3}\)? [0-9]{3}-[0-9]{4}$'
+(555) 123-4567
+echo "555) 123-4567" | egrep '^\(?[0-9]{3}\)? [0-9]{3}-[0-9]{4}$'
+555) 123-4567
+
+read compressed files--zgrep
+grep hello .gz
+test.gz:hello
+
+Remove Sections from Each Line 0f File--cut
+Option		Description
+-c char_list	Extract the portion of the line defined by char_list.
+-f filed_list		Ectract one or more fileds from the line as defined by field_list.
+-d delim_char	When -f is specified, use delim_char as the field delimiting character. By default, fields must be separated
+		by a single tab character.
+--complement	Extract the entire line of text, except for those portions specified by -c and/or -f.
+
+for example:
+cat -A distros.txt | head -n 3
+hello^lworld^lcommand^lline^l2001$
+hello^lworld^lC^llanguage^l2002$
+hello^lworld^lCPP^llanguiage^l2003$
+
+cut -f 5 distros.txt | head -n 3
+2001
+2002
+2003
+
+cut -f 5statr idtros.txt | cut -c 3-4 | head -n 3
+01
+02
+03
+
+cut -d ':' -f 1 /etc/passwd | head -n 3
+root
+daemon
+bin
+
+expand distros.txt | cut -c 19-25		//expand program to substitute tabs for spaces.
+command 					//unexpand program to substitute spaces for tabs.
+C    li
+CPP    
+
+cat > file1.txt
+world
+hello
+command line
+
+cat > file2.txt
+hello
+world
+CPP
+
+paste file1.txt file2.txt
+world	hello
+hello	world
+command line	CPP
+
+paste file1.txt file1.txt > file11.txt; mv file11.txt file1.txt
+paste file1.txt file2.txt > file22.txt; mv file22.txt file2.txt
+cat file1.txt
+world	world
+hello	hello
+command line	command line
+
+cat file2.txt
+world	hello
+hello	world
+command line	CPP
+
+join file1.txt file2.txt
+world world hello
+hello hello world
+command line command line line CPP
+
+Compare Two Sorted Files Line By Line--comm
+cat > file1.txt
+a
+b
+c
+
+cat >file2.txt
+b
+c
+d
+
+comm file1.txt file2.txt
+a
+		b
+		c
+	d
+
+comm -12 file1.txt file2.txt		//suppress column 1(line unique to file1) and 2(line unique to file2)
+b
+c
+
+Compare Files Line By Line--diff	//convert the first file to the second file
+diff file1.txt file2.txt
+1d0
+< a
+3a3
+> d
+
+Change	Description
+r1ar2	Append the lines at the position r2 in the second file to the position r1 in the first file.
+r1cr2	Change the lines at position r1 with the lines at the position r2 in the second file.
+r1dr2	Delete the lines in the first file at position r1, which would have oppeared at range r2 in the second file.
+
+Comtext format--diff -c(the -c option)
+diff -c file1.txt file2.txt
+*** file1.txt	2018-12-30 10:37:12.000000000 -0500
+--- file2.txt	2018-12-30 10:37:14.000000000 -0500
+***************
+*** 1,4 ****
+- a
+  b
+  c
+--- 1,4 ----
+  b
+  c
++ d
+
+Indicator	Meaning
+Blank		A line shown for context. no difference
+-		A line deleted.
++		A line added.
+!		A line changed.
+
+Unified format--diff -u(the -u option)
+diff -u file1.txt file2.txt
+--- file1.txt	2018-12-30 10:37:12.0000000000 -0500
++++ file2.txt	2018-12-30 10:37:14.0000000000 -0500
+@@ -1,4 +1,4 $$
+-a
+ b
+ c
++d
+
+Character	Meaning
+Blank		This line is shared by both files.
+-		This line was removed from the first file.
++		This line was added to the first file.
+
+Apply a diff to an Original--patch
+
+diff -u file1.txt file2.txt > patchfile.txt
+
+patch < patchfile.txt
+patching file file1.txt
+
+cat file1.txt
+b
+c
+d
+
+Transliterate or Delete Characters--tr
+
+echo "low" | tr a-z A-Z
+LOW
+
+echo "low" | tr [:lower:] A
+AAA
+
+ROT13 encoding
+echo "secret text" | tr a-zA-Z n-za-mN-ZA-M
+frperg grkg
+echo "frperg grkg" | tr a-zA-Z n-za-mN-ZA-M
+secret text
+
+echo "aaabbbccc" | tr -s ab		//squieeze(delete)  repeated instances of a character
+abccc
+
+Stream Editor for Filtering and Transforming Text--sed (shorted stream editor)
+It performs text editing on a stream of text, either a set of specified files or standard input.
+
+echo "front" | sed '1s/front/back/'	//Most commands in sed may be preceded by an address,which spacifies which line(s) 
+back					//of the input stream will be edited.
+
+Address		Description
+n		A line number where n is a positive integer
+$		The last line
+/regexp/	Lines matching a POSIX basic regular expression.
+addr1,addr2	A range of lines from addr1 to addr2, inclusive.
+first~step	Match the line represented by the number first and then each subsequent line at step intervals.
+addr1,+n	Match addr1 and the following n lines.
+addr!		Match all lines except addr, which may be any of the forms above.
+
+sed -n '1,5p' file1.txt		//p command simply causes a matched line to be printed. -n to cause sed not to print every
+1				//line by default.
+2
+3
+
+sed -n '/1/p' file1.txt
+1
+
+sed -n '/1/!p' file1.txt
+2
+3
+
+Command	Description
+=	Output current line number
+a	Append text agter the current line.
+d	Delete the current line
+i	Insert text in front of the current line.
+p	Print the current line.
+q	Exit sed without processing any more lines. If the -n option is not specified, output the current line.
+Q	Exit sed without precessing any more lines.
+s/regexp/replacepent/	Substitute the contents of replacement wherever regexp is found. replacement may incluude the
+			special character &, which is equivalent to the text matched by regexp.
+y/set1/set2	Perform transliteration by converting characters from set1 to the corresponding characters in set2.
+
+cat file1.txt
+11/25/2008
+12/26/2009
+04/30/2018
+
+sed 's/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/' file1.txt
+2008-11-25
+2009-12-26
+2018-04-30
+
+Step1:	convert 11/25/2008 to 2008-11-25
+regular expression:
+[0-9]{2}/[0-9]{2}/[0-9]{4}$
+
+Step2:	regular expression back references
+([0-9]{2})/([0-9]{2})/([0-9]{4})$
+
+Step3:	our command looks like this:
+sed 's/([0-9]{2})/([0-9]{2})/([0-9]{4})$/\3-\1-\2/' file1.txt
+
+Step4:	sed only support regexp, and the first slach in our regexp will confuse sed. so:
+sed 's/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/' file1.txt
+
+echo "aaabbbccc" | sed 's/b/B/'
+aaaBbbccc
+
+echo "aaabbbccc" | sed 's/b/B/g'
+aaaBBBccc
+
+sed -f file1.sed file1.txt
+
+Linux Distributions Report
+
+2008-12-25
+2009-12-26
+2018-04-30
+
+cat -n file1.sed
+1	#sed script to produce Linux distributions report
+2	
+3	1 l\								//sed script support to use \"\n"(return) inset
+4	\								//edit stream.
+5	Linux Distributions Report\
+6	
+7	s/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/
+8	y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/
+
+Interactive Spell Checker--aspell	//need install aspell-en(english language spelling check)
+To spellcheck a text file containing simple prose.used like this:
+aspell chech textfile
+
+Number lines--nl
+supports a concept called logical pages when numbering. 
+
+Markup	Meaning
+\:\:\:	Start of logical-page header
+\:\:	Start of logical-page body
+\:	Start of logical-page footer
+
+Option		Meaning
+-b style	Set boy numbering to style, where style is one of the following:
+		a	Number all lines.
+		t	Number only non-blank lines. This is the default.
+		n	None.
+		pregexp	Number only lines matching vasic regular expression regexp.
+-f style	Set footer numbering to style. Default is n(none).
+-h style	Set header numbering to sytle. Default is n(none).
+-i number	Set page numbering increment to number. Default is 1.
+-n format 	set numbering format to format, where format is one of the following:
+		ln	Left justified, without leading zeres.
+		rn	Right justified, without leading zeres. This is the default.
+		rz	Right justified, with leading zeres.
+-p		Do not reset page numbering at the beginning of each logical page.
+-s string	Add string to the end of each line number to create a separator. Default is a single tab character.
+-v number	Set first line number of each logical page to numver. Default is 1.
+-w width	Set width of the line number field to width. Default is 6.
+
+for example:
+echo -e "\:\:\:\n\tThis is a nl command test\n\:\:\nTest is start,\nand continue\nwill be end.\n\:\n\tend the text" | nl -w 1
+
+	This is a nl command test
+
+1	Test is start,
+2	and continue
+3	will be end.
+
+	end the text
+
+Wrap Each Line to a Specified Length--fold
+Folding is the process of breaking lines of text at a speified width.
+for example:
+echo "The quick brown fox jumped over the lazy dog." | fold -w 12
+The quick br
+own fox jump
+ed over the 
+lazy dog.
+
+echo "The quick brown fox jumped overr the lazy dog." | fold -w 12 -s
+The quick
+brown fox
+jumped over
+the lazy dog.
+
+A Simple Text formatter--fmt
+The fpm program also folds text plus a lot more.
+Option		Description
+-c		Operate in crown margin mode.
+-p string	Format only those lines beginning with the prefix string.
+-s		Split-only mode. In this mode, lines will be split only to fit the specified column width. Short lines will
+		not be joined to fill lines.
+-u		Perform uniform spacing. This will apply traditional "typewriterstyle" formatting to the text. This means a 
+		single space between words and two spaces between sentences.
+-w width	Format text to fit tiehin a column width characters wide.
+
+fmt works like this:
+fmt -cw 20		//equal fold -w 20 -s
+
+Format Text for printing--pr
+pr -l 15 -w 65 file.txt		//we employ the -l option(for page length) and the -w option(page width) to define a "page"
+that is 65 characters wide and 15 lines long.
+
+Format and Print Date--printf
+like C programming language. the command is not used pipelines(it does not accept standard input), nor does it find frequent 
+application directly on the command line. it's used mostly in scripts.
+
+for example:
+printf "I formatted the string : %s\n" foo
+I formatted the string : foo
+
+Several optional components may be added to the conversion specifier to adjust its output. A complete conbersion specification
+may consist of the following:
+	%[flags][width][.precision]conversion_specificaton
+
+specifier	Description
+o		Format an integer as an octal number
+s		Format a string.
+x		Format an integer as a hexadecimal number using lowercase a-f where needed.
+X 		Same as x. but use uppercase letters.
+%		Print a literal % symbol (i.e.,specify "%%").
+
+Component	Description
+flags:	#	Use the alternate format for output. for o conversion, prefixed with 0.for x(X) conversion, prefix with 0x(0X)
+	0	Pad the output with zeres.
+	-	left-align the output. by default, printf right-aligns output.
+	 (space)Produce a leading space for positive numbers.
+	+	Sign positive numbers. by default, printf signs only negative numbers.
+width		Anumber specifying the minimum field width
+.precision	For floating-point numbers, specify the number of digits of precision to be output agter the decimal point.
+
+Convert Text Files for printing--pr
+used to adjust text to fit on a specifiec page size, with optional page headers and margins.(see detail on the book)
+
+Print Files (Berkeley style)--lpr
+the lpr program can be used to send files to the printer.(see detail on the book)
+
+Print Files(System V style)--lp
+lp accepts either files or input for printing.(see detail on the book)
+
+ASCII to PostScript(the past called),Anything to PostScript(the now call) --a2ps
+the program's default behavior is that of a "pretty printer," meaning that it improves the appearance of output(see detail
+on the book)
+
+Display Pirnt System Status--lpstat
+printing systems are designed to hadle mutiple print jobs from multiple users.(see detail on the book)
+
+Display Printer Queue Status--lpq
+see the status of a printer queue.(see detail on the book)
+
+Cancel Print jobs--lprm(Berkely) and cancel(System V)
+
+analyze the build enbironment--./configure
+configure will output a lot of messages as it tests and condigures the build. most important one is Makefile.
+
+Utility to maintain programs--make
+takes as input a Makefile, which describes the relationships and dependencies among the components that compose the 
+finished program.
+
+sudo make install	//Well-packaged source code often includes a special make target called install. This target 
+			//will install the final product in a system directory for use
+
+SCRIPT:
+#!/bin/bash				//The #! character sequence is , in fact, a special construct called a shebang.
+# This is our first script.		//The shebang is used to tell the system the name of the interpreter that should 
+					//be used to execute the script that follows.
+echo 'Hello World!'
+
+Here Documents:
+A here document is an additional form of I/O redirection in which we embed a body of text into our script and feed it
+into the standaart input of a command. It works like this:
+command << token
+text
+token
+
+for example:
+foo="some text"
+cat << _EOF_				//_EOF_  Note that the token must appear alone and that there must not be 
+> $foo					//trailing spaces on the line
+> '$foo'
+> /$foo
+> _EOF_
+some text
+'some text'
+$foo
+
+Variables and Constants:
+A common convention is to use uppercase letters to designate constants and lowercase letters for true variables.
+
+Shell Function:
+function name{}
+	commands
+	return
+}
+
+name() {
+	commands
+	return
+}
+
+Using test:
+test expression
+and the more popular:
+[ expression ]
+
+Test File Expressions:
+Expression	Is true if...
+file1 -ef file2	file1 and file2 have the saame inode numbers(the two filenames refer to the saame file by hard linking).
+file1 -nt file2 	file1 is newer than file2.
+file1 -ot file2 	file1 is older than file2.
+-b file		file exists and is a block-special (device) file.
+-c file		file exists and is a character-special (device) file.
+-d file		file exists and is a directory.
+-e file		file exists.
+-f file		file exists and is a regular file.
+-g file		file exists and is set-group-ID.
+-G file		file exists and is owned by the effective group ID.
+-k file		file exists and has its "sticky bit" set.
+-L file		file exists and is a symbolic link.
+-O file		file exists and is owned by the effective user ID.
+-p file		file exists and is a named pipe.
+-r file	 	file exists and is readable (had readable permission for the effective user).
+-s file		file exists and has a length greater than zero.
+-S file		file exists and is a network socket.
+-t fd		fd is a file descriptor directed to/from the terminal.This can be used to determine whether standard 
+		input/output/error is being redirected
+-u file		file exists and is setuid.
+-w file		file exists and is writable (has write permission for the effective uesr).
+-x file		file exists and is executable (has execute/search permission for the effective user).
+
+Test String Expressions:
+Expression	Is true if...
+string		string is not null
+-n string	The length of string is greater than zero.
+-z string	The length of string is zero.
+string1 = string2	string1 and string2 atr equal. Single or double equal signs may be used, but the use of double 
+string1 == string2	equal signs is greatly preferred.
+string1 != string2	string1 and string2 are not equal.
+string1 > string2	string1 sorts after string2.
+string1 < string2	string1 sorts before string2.
+
+Test Integer Expression
+Expression	Is true if...
+int1 -eq int2	int1 is equal to int2.
+int1 -ne int2	int1 is not equal to int2.
+int1 -le int2	int1 is less than or equal to int2.
+int1 -lt int2	int1 is less than int2.
+int1 -ge int2	int1 is greater than or equal to int2
+int1 -gt int2	int1 is greater than int2.
+
+A More Modern Version of Test
+[[ expression ]]
+Using [[ ]] with the =~ string expression operator, we could extended regular expression regex.
+e.g:
+INT=-5
+if [[ "$INT" =~ ^-?[0-9]+$ ]]; then
+echo "INT is an integer."
+fi
+INT is an integer.
+
+Designed for integer--(( ))
+This is useful for operating on integers.
+e.g:
+if ((1)); then echo "It is true."; fi
+It is true.
+
+Logical Operators:
+Opeartion	Tset	[[ ]]and(( ))
+AND		-a		&&
+OR		-o		||
+NOT		!		!
+
+Read Values from Standard Input--read
+
+The command has the following syntax:
+read [-options] [variable...]
+
+If read receives fewer than the expected number, the extra variables are empty, while an excessive amount of input results
+in the final variable containing all of the extra input, if no variables are listed agter the read command, a shell 
+variable, REPLY, will be assigned all the input.
+
+read Options:
+Option		Description
+-a array	Assign the input to array, starting with index zero.
+-d delimiter	The first character in the string delimiter is used to indicate end of input, ratherr than a newline
+		character.
+-e		Use Readline to handle input.This permits input editing in the same manner as the command line.
+-n num		Read num characters of input, rather than an entire line.
+-p promp	Display a prompt for input using the string prompt.
+-r		Raw mode. Do not interpret backslash characters as escapes.
+-s		Silent mode. Do not echo characters to the display as they are typed.
+-t seconds	Timeout. Terminate input after seconds. read returns a nonzero exit status if an input times out.
+-u fd		Use input fromm file descriptor fd, rather than standard input.
+
+The operator indicates a here string--<<<
+e.g:
+cat <<< "hello"
+hello
+
+while the read commmand normally takes input from standard input, you cannot do this:
+echo "foo" | read
+The explanation is pipelines create subshells. 
+
+Branching with case
+Pattern		Description
+a)		Matches if word equals a.
+[[:alpha:]])	Matches if word is a single alphabetic character.
+???)		Matches if word is exactly three characters long.
+*.txt)		Matches if word ends with the characters.txt.
+*)		Matches any value of word.
+
+e.g:
+#!/bin/bash
+
+read -p "enter word > "
+
+case $REPLY in
+	[[:alpha:]])	echo "is a single alphabetic character." ;;		//if addition of the ;;&
+	[ABC][0-9])	echo "is A, B, or C followd by a digit." ;;
+	???)		echo "is three characters long." ;;
+	*.txt)		echo "is a wrod enging in '.txt'" ;;
+	*)		echo "is something else." ;;
+esac
+
+./case_script
+enter word > a
+a is a single alphabetic character.
+
+If addition of the ;;& syntax allows case to continue on to the next test rather than simply terminating.
+e.g
+
+./case_script > a
+a is a single alphabetic character.
+a is something else.
+
+Accessing the command line
+File posit-param_script:
+#!/bin/bash
+# posit-param: script to view command line parameters
+echo "
+Number of arguments: $#		#yields the number of arguments on the command line
+\$0 = $0
+\$1 = $1
+\$2 = $2
+\$10 = ${10}			#if parameters more than 9, to specify a number with surround the number in braces.
+
+e.g:
+Number of arguments: 10
+posit-param_script 1 2 3 4 5 6 7 8 9 10
+$0 = /home/me/bin/posit-param_script
+$1 = 1
+$2 = 2
+$10 = 10
+
+Getting Access to many Arguments--shift
+File posit-param2_script:
+#!/bin/bash
+# posit-param2: script to display all arguments
+count = 1
+
+while [[ $# -gt 0 ]]; do
+	ech;i;o "Argument $count = $1"
+	count=$((count + 1))
+	shift
+done
+
+e.g:
+posit-param2_script a b c	// Each time shift is executed, the value of $2 is moved to $1, the value of $3 is moved
+Argument 1 = a			// to $2, and so on. the value of $# is also reduced by 1.
+Argument 2 = b
+Argument 3 = c
+
+Handling Positional Parameters En Masse
+File posit-params3_script: 
+#!/bin/bash
+# posit-params3_script: script to demonstrate $* and $@
+print_params () {
+	echo "\$1 = $1"
+	echo "\$2 = $2"
+	echo "\$3 = $3"
+	echo "\$4 = $4"
+}
+
+pass_params () {
+	echo -e "\n" '$* :';	print_params $*
+	echo -e "\n" '"$*" :';	print_params "$*"
+	echo -e "\n" '$@ :';	print_params $@
+	echo -e "\n" '"$@" :';	print_params "$@"
+}
+
+pass_params "word" "words with spaces"
+
+e.g:
+posit-param3_script
+
+ $* :
+$1 = word
+$2 = words
+$3 = with
+$4 = spaces
+
+ "$*" :
+$1 = word words with spaces
+$2 = 
+$3 = 
+$4 = 
+
+ $@ :
+$1 = word
+$2 = words
+$3 = with
+$4 = spaces
+
+ "$@" :				// "$@" is by far the most useful for most situations
+$1 = word
+$2 = words with spaces
+$3 = 
+$4 = 
+
+The original for command's syntax is as follows:
+for variable [in words]; do		// If the optional in words portional the for command is omitted, for defaults to processing
+	commands		//  the positional parameters..
+done
+
+C language form:
+for (( expression1; expression2; expression3 )); do
+	commands
+done
+
+Expansions to Manage Empty Variables:
+${parameter:-word}		//If parameters is unset (i.e., does not exist) or is empty, this expansion results in tha value of word.
+			//If parameters is not empty, the expansion results in the value of parmeter.
+
+${parameter:=word}		//If parameters is unset or empty, this expansion results in the value of word. In addition, the value of
+			//word is assigned to parameter. If parameter is not empty, the expansion results in the value of parameter.
+
+${parameter:?word}		//If parameter is unset or empty, this expansion causes the script to exit with an error, and the contents
+			//of word are sent to standard error. If parameter is not empy, the expansion results in the value of parameter.
+
+${parameter:+word}		//If parameter is unset or empty, the expansion results in nothing. If parameter is not empty, the value
+			//of word is substituted for parameter; howerver, the value of parameter is not changed.
+${parameter:-word}:
+[guest@centos7 ~]$ foo=
+[guest@centos7 ~]$ echo ${foo:-"substitute value if unset"}
+substitute value if unset
+[guest@centos7 ~]$ echo $foo
+
+[guest@centos7 ~]$ foo=bar
+[guest@centos7 ~]$ echo ${foo:-"substitute value if unset"}
+bar
+[guest@centos7 ~]$ echo $foo
+bar
+
+${parameter:=word}:
+[guest@centos7 ~]$ foo=
+[guest@centos7 ~]$ echo ${foo:="default value if unset"}
+default value if unset
+[guest@centos7 ~]$ echo $foo
+default value if unset
+[guest@centos7 ~]$ foo=bar
+[guest@centos7 ~]$ echo${foo:="default value if unset"}
+[bar
+[guest@centos7 ~]$ echo $foo
+bar
+
+${parameter:?word}:
+[guest@centos7 ~]$ foo=
+[guest@centos7 ~]$ echo ${foo:?"parameter is empty"}
+bash: foo: parameter is empty
+[guest@centos7 ~]$ echo $?		
+1
+[guest@centos7 ~]$ false		# $? meas is show the return's state(0 always true)
+[guest@centos7 ~]$ echo $?
+1
+[guest@centos7 ~]$true
+[guest@centos7 ~]$ echo $?
+0
+[guest@centos7 ~]$ foo=bar
+[guest@centos7 ~]$ echo ${foo:?"parameter is emtpy"}
+bar
+[guest@centos7 ~]$ echo $?
+0
+
+${parameter:+word}:
+[guest@centos7 ~]$ foo=
+[guest@centos7 ~]$ echo ${foo:+"substitute value if set"}
+
+[guest@centos7 ~]$ foo=bar
+[guest@centos7 ~]$ echo ${foo:+"substitute value if set"}
+substitute value if set
+
+Expansions That Return Variable Names:
+${!prefix*}		//both forms of the expansion perform identivally. 
+${!prefix@}
+e.g.:
+[guest@centos7 ~]$ echo ${!BASH*}
+BASH BASH_ARGC BASH_ARGV BASH_COMMAND BASH_COMPLETION
+
+expands into the length of the string contained by parameter.
+${#parameter}		//if parameter is either @ or *, then the expansion results in the number of positional parameters.
+e.g.:
+[guest@centos7 ~]$ foo="This string is long."
+[guest@centos7 ~]$ echo "'$foo' is ${#foo} characters long."
+'This string is long.' is 20 characters long.
+
+${parameter:offset}
+${parameter:offset:length}
+This expansion is used to extract a portion of the string contained in parameter. The extraction begins at offset characters from the 
+beginning of the string and continues until the end of the string, unless the length is specified.
+e.g.:
+[guest@centos7 ~]$ foo="This string is long."
+[guest@centos7 ~]$ echo ${foo:5}
+string is long.
+[guest@centos7 ~]$ echo ${foo:5:6}
+string
+[guest@centos7 ~]$ echo ${foo: -5}	//if offset is negative value that mean it starts from the end of the string. and preceded by
+long.				//a space to prevent confusion with ${parameter:-word} expansion.
+[guest@centos7 ~]$ echo ${foo: -5:2}	//length must not be less than 0.
+lo
+If parameter is @, the result of the expansion is length positional parameters, starting at offset.
+
+${parameter#pattern}	//These expansions remove a leading portion of the string contained in parameter defined by pattern.
+${parameter##pattern}	//# form removes the shortest match, ## form removes the longest match.
+e.g.:
+[guest@centos7 ~]$ foo=file.txt.zip
+[guest@centos7 ~]$ echo ${foo#*.}
+txt.zip
+[guest@centos7 ~]$ echo ${foo##*.}
+zip
+
+${parameter%pattern}	//These expansions are the same as the # and ## expansion above, except they remove text from the
+${parameter%%pattern}	//end of the string contained in parameter rather than from the beginning.
+e.g.:
+[guest@centos7 ~]$ foo=file.txt.zip
+[guest@centos7 ~]$ echo ${foo%.*}
+file.txt
+[guest@centos7 ~]$ echo ${foo%%.*}
+file
+
+${parameter/pattern/string}
+${parameter//pattern/string}
+${parameter/#pattern/string}
+${parameter/%pattern/string}
+This expansion performs a search and replace upon the contents of parameter.
+e.g.:
+[guest@centos7 ~]$ foo=JPG.JPG
+[guest@centos7 ~]$ echo ${foo/JPG/jpg}		//only the first occurrence of pattern is replaced
+jpg.JPG
+[guest@centos7 ~]$ echo ${foo//JPG/jpg}		//all occurrence are replaced
+jpg.jpg
+[guest@centos7 ~]$ echo ${foo/#JPG/jpg}	//requires that the match occur at the beginning of the string
+jpg.JPG
+[guest@centos7 ~]$ echo ${foo/%JPG/jpg}	//requites that the match occur at the end of the string
+JPG.jpg
+
+[guest@centos7 ~]$ echo $((0xff))
+255
+[guest@centos7 ~]$ echo $((2#11111111))
+255
+
+An Arbitraty-precision Calculator Language--bc
+File foo.bc:
+/* A very simple bc script */		//similar C language
+2 + 2
+[guest@centos7 ~]$ bc foo.bc
+bc 1.06.95
+copyright 1991-1994
+For details type 'warranty'.
+4
+[guest@centos7 ~]$ bc -q
+2 + 2
+4
+quit				//use quit command quit the bc
+[guest@centos7 ~]$ bc < foo.bc
+4
+[guest@centos7 ~]$ bc <<<"2+2"
+4
+
+Array
+Single values may be assigned using the following syntax:
+name[subscript]=value
+Multiple values may be assigned using the following syntax:
+name=(value1 value2 value3 ...)
+OR
+name=([0]=value1 [1]=value2 [2]=value3 ...)
+
+e.g.:
+[guest@centos7 ~]$ animals=("a dog" "a cat" "a fish")
+[guest@centos7 ~]$ for i in ${animals[*]}; do echo $i; done
+a
+dog
+a
+cat
+a
+fish
+[guest@centos7 ~]$ for i in ${animals[@]}; do echo $i; done
+a
+dog
+a
+cat
+a
+fish
+[guest@centos7 ~]$ for i in "${animals[*]}";do echo $i; done
+a dog a cat a fish
+[guest@centos7 ~]$ for i in "$}animals[@]}"; do echo $i; done		//which matched the array's "real" contents
+a dog
+a cat
+a fish
+
+[guest@centos7 ~]$ a[100]=foo
+[guest@centos7 ~]$ echo ${#a[@]}	// number of array elements
+1
+[guest@centos7 ~]$ echo ${#a[100]}	//length of element 100
+3
+
+${!array[*]}			//to determine which elements actually exist.
+${!array[@]}		//both of them equvalent.
+e.g.:
+[guest@centos7 ~]$ foo=([2]=a [4]=b [6]=c)
+[guest@centos7 ~]$ for i in "${foo[@]}"; do echo $i; done
+a
+b
+c
+[guest@centos7 ~]$ for i in "${!foo[@]}"; do echo $i; done
+2
+4
+6
+
+[guest@centos7 ~]$ foo=(a b c)
+[guest@centos7 ~]$ echo ${foo[@]}
+a b c
+[guest@centos7 ~]$ foo+=(d e f)
+[guest@centos7 ~]$ echo ${foo[@]}
+a b c d e f
+
+bash allows commands to be grouped together. This can be done in one of two ways:
+Group command:
+	{ command1; command2; [command3; ...] }
+Subshell:
+	(command1; command2; [command3;...])
+e.g.:
+[guest@centos7 ~]$ { ls -l; echo "listing of foo.txt"; cat foo.txt; } > output.txt
+OR
+[guest@centos7 ~]$ (ls -l; echo "listing of foo.txt"; cat foo.txt) > output.txt
+
+Process substitution is expressed in two ways: for processes that produce standard output:
+	<(list)
+or for processes that intake standard input:
+	>(list)
+where list is a list of command.
+e.g.:
+[guest@centos7 ~]$ read < <(echo "foo")
+[guest@centos7 ~]$ echo $REPLY
+foo
+Process substitution allows us to treat the output of a subshell as an ordinary file for purposes of redirection.
+[guest@centos7 ~]$ echo <(echo "foo")
+/dev/fd/63
+By using echo to view the result of the expansion, we see that the output of the subshell is being provided by a file named /dev/fd/63
+
+Traps are implemented with the appropriately named built-in comand trap.
+	trap argument signal [signal...]
+where argument is a string that will be read and treated as a command, and signal is the specification of a siganl that will trigger execution
+of the interpreted command.
+e.g.:
+FIle trap-demo_script:
+#!/bin/bash
+
+# trap-demo : simple signal handling demo
+
+exit_on_signal_SIGINT () {
+	echo "Script interrupted." 2>&1
+	exit 0
+}
+exit_on_signal_SIGTERM () {
+	echo "Script terminated." 2>&1
+	exit 0
+}
+
+trap exit_on_signal_SIGINT SIGINT
+trap exit_on _signal_SIGTERM SIGTERM
+
+for i in {1..5}; do
+	echo "Iteration $i of 5"
+	sleep 5
+done
+[guest@centos7 ~]$ /.trap-demo_script
+Iteration 1 of 5
+Iteration 2 of 5
+Script interrupted.
+
+bash has a buit-in command to help manage asynchronous execution--wait
+File async-parent_script:
+#!/bin/bash
+
+# async-parent : Asynchronous execution demo (parent)
+
+echo "Parent: starting..."
+echo "Parent: launching child script..."
+./async-child_script &
+pid=$!					// $! will always contain the process ID of the last job put into the backgroud
+echo "Parent: child (PID= $pid) launched."
+
+echo "Parent: continuing..."
+sleep 2
+
+echo "Parent: pausing to wait for child to finish..."
+wait $pid
+
+echo "Parent: child is finished. continuing..."
+echo "Parent: parent is done. Exiting."
+
+File async-child_script:
+#!/bin/bash
+
+# async-child : Asynchronous execution demo (child)
+
+echo "Child: child is running..."
+sleep 5
+echo "Child: child is done. Exiting."
+[guest@centos7 ~]$ /.async-paren_script
+Parent: starting...
+Parent: launching child script...
+Parent: child (PID= 6741) launched.
+Parent: continuing...
+Child: child is running...
+Parent: pausing to wait for child to finish...
+Child: child is done. EXiting.
+Parent: child is finished. Continuing...
+Parent: parent is done. Exiting.
+
+Named pipes behave like files but actually form firs-in, first-out (FIFO) buffers--mkfifo
+process1 > named_pipe
+process2 < named_pipe		// it will behave as if process1 | process2
+e.g.:
+[guest@centos7 ~]$ mkdifo pipe1
+[guest@centos7 ~]$ ls -l pipe1
+prw-r--r-- 1 me	me	0 2012-07-17 06:41 pipe1
+Here we use mkfifo to create a named pipe called pipe1. In the attributes field is p, indicating that it is a named pipe.
+e.g.:
+[guest@centos7 ~]$ ls -l pipe1 > pipe1 $
+[guest@centos7 ~]$ cat < pipe1
+prw-r--r-- 1 me	me	0 2012-07-17 06:41 pipe1
+
+spit screen in command screee
+[guest@centos7 ~]$ tmux
+
+Ctrl + b ; "	//press Ctrl + b, and press ", verticle split screen
+Ctrl + b ; %	//press Ctrl + b, and press %, erect split screen
+Ctrl + b ; o	//press Ctrl + b, and press o, change screen with same director
+Ctrl + b ; x	//press Ctrl + b, and press x, close screen
+Ctrl + b ;  (space key)	//press Ctrl + b, and press space key change sreen from verticle to erect
+
+gdb exe(file)	//debugging tool
+conmand:		abbr	
+list number	l	//display ten lines codes from numbe;
+break		b	//set breakpoint run until this
+info		i	//infomation program state
+run		r	//run program
+display		disp	//display some variable value each suspend
+step		s	//step by step run sentence and into function
+next		n	//step by step run sentence and not into function
+print		p	//print inner variable
+continue		c	//continue run program until next breakpoint
+set var name=v		//set variable value
+start		st	//run program and suspend at one sentence in function main
+file			//load file need to debug
+kill		k	//kill debugging program
+watch			//watch variable value's change
+backtrace		bt	//informate function info(heap and stack)
+frame		f	//informate stack frame
+quit		q	//quit GDB
+delete		d	//delete breakpointer
+layout 			// display split the window
+layout src			// display split the source code wnidow
+layout asm		// display split the assemble window
+layout regs		// display split the source code window and aseemble window and register window
+layout			// display split the assemble window and source code window
+info threads		// display all  threads 
+thread ID			// ID is a thread is , change debugging thread
