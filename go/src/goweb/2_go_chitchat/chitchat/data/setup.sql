@@ -1,3 +1,8 @@
+drop table posts;
+drop table threads;
+drop table sessions;
+drop table users;
+
 create table users (
     id         serial primary key,
     uuid       varchar(64) not null unique,
