@@ -40,11 +40,11 @@ func Test_UserUpdate(t *testing.T) {
 	if err := users[0].Create(); err != nil {
 		t.Error(err, "Cannot create user.")
 	}
-	u, err := UserByEmail(users[0].Email)
-	if err != nil {
+	users[0].Name = "Random User"
+	if err := users[0].Update(); err != nil {
 		t.Error(err, "- Cannot update user")
 	}
-	u, err = UserByEmail(users[0].Email)
+	u, err := UserByEmail(users[0].Email)
 	if err != nil {
 		t.Error(err, "- Cannot get user")
 	}

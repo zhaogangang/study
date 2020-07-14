@@ -12,7 +12,7 @@ create table users (
     created_at timestamp not null
 );
 
-create table session (
+create table sessions (
     id         serial primary key,
     uuid       varchar(64) not null unique,
     email      varchar(255),
@@ -28,7 +28,7 @@ create table threads (
     created_at timestamp not null
 );
 
-createa table posts (
+create table posts (
     id         serial primary key,
     uuid       varchar(64) not null unique,
     body       text,

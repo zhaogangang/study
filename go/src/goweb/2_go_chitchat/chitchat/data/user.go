@@ -21,7 +21,7 @@ type Session struct {
 
 // Create a new sessino for an existing user
 func (user *User) CreateSession() (session Session, err error) {
-	statement := "insert into session (uuid, email, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, email, user_id, created_at"
+	statement := "insert into sessions (uuid, email, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, email, user_id, created_at"
 	stmt, err := Db.Prepare(statement)
 	if err != nil {
 		return
@@ -35,47 +35,33 @@ func (user *User) CreateSession() (session Session, err error) {
 // Get the session for an existing user
 func (user *User) Session() (session Session, err error) {
 	session = Session{}
-	err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessins WHERE user_id = $1", user.Id).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+	err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE user_id = $1", user.Id).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
 	return
 }
 
-// Check if session is valid in the database
-func (session *Session) Check() (valid bool, err error) {
-	err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM session WHERE uuid = $1", session.Uuid).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
-	if err != nil {
-		valid = false
-		return
-	}
-	if session.Id != 0 {
-		valid = true
-	}
-	return
-}
-
-// Delete session from database
-func (session *Session) DeleteByUUID() (err error) {
-	statement := "delete from session where uuid = $1"
+// Create a new thread
+func (user *User) CreateThread(topic string) (conv Thread, err error) {
+	statement := "insert into threads (uuid, topic, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, topic, user_id, created_at"
 	stmt, err := Db.Prepare(statement)
 	if err != nil {
 		return
 	}
 	defer stmt.Close()
-
-	_, err = stmt.Exec(session.Uuid)
+	// use QueryRow to return a row and scan the returned id into the Session struct
+	err = stmt.QueryRow(createUUID(), topic, user.Id, time.Now()).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
 	return
 }
 
-// Get the user from the session
-func (session *Session) User() (user User, err error) {
-	user = User{}
-	err = Db.QueryRow("SELECT id, uuid, name, email, created_at FROM users WHERE id = $1", session.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
-	return
-}
-
-// Delete all session from database
-func SessionDeleteAll() (err error) {
-	statement := "delete from sessions"
-	_, err = Db.Exec(statement)
+// Create a new post to a thread
+func (user *User) CreatePost(conv Thread, body string) (post Post, err error) {
+	statement := "insert into posts (uuid, body, user_id, thread_id, created_at) values ($1, $2, $3, $4, $5) returning id, uuid, body, user_id, thread_id, created_at"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	// use QueryRow to return a row and scan the returned id into the Session struct
+	err = stmt.QueryRow(createUUID(), body, user.Id, conv.Id, time.Now()).Scan(&post.Id, &post.Uuid, &post.Body, &post.UserId, &post.ThreadId, &post.CreatedAt)
 	return
 }
 
@@ -122,6 +108,46 @@ func (user *User) Update() (err error) {
 	return
 }
 
+// Check if session is valid in the database
+func (session *Session) Check() (valid bool, err error) {
+	err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE uuid = $1", session.Uuid).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+	if err != nil {
+		valid = false
+		return
+	}
+	if session.Id != 0 {
+		valid = true
+	}
+	return
+}
+
+// Delete session from database
+func (session *Session) DeleteByUUID() (err error) {
+	statement := "delete from sessions where uuid = $1"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(session.Uuid)
+	return
+}
+
+// Get the user from the session
+func (session *Session) User() (user User, err error) {
+	user = User{}
+	err = Db.QueryRow("SELECT id, uuid, name, email, created_at FROM users WHERE id = $1", session.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
+	return
+}
+
+// Delete all session from database
+func SessionDeleteAll() (err error) {
+	statement := "delete from sessions"
+	_, err = Db.Exec(statement)
+	return
+}
+
 // Delete all users from database
 func UserDeleteAll() (err error) {
 	statement := "delete from users"
@@ -149,13 +175,13 @@ func Users() (users []User, err error) {
 // Get a single user given the email
 func UserByEmail(email string) (user User, err error) {
 	user = User{}
-	err = Db.QueryRow("SELECT id, uuid, email, password, created_at FROM users WHERE email = $1", email).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+	err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE email = $1", email).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
 	return
 }
 
 // Get a single user given the UUID
 func UserByUUID(uuid string) (user User, err error) {
 	user = User{}
-	err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE uuid = $1", uuid).Scan(&user.Id, &user.Uuid, &user.Name, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+	err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE uuid = $1", uuid).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
 	return
 }

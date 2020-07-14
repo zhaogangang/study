@@ -22,7 +22,11 @@ var users = []User{
 func setup() {
 	ThreadDeleteAll()
 	SessionDeleteAll()
-	UserDeleteAll(0)
+	UserDeleteAll()
+}
+
+func Test_setup(t *testing.T) {
+	setup()
 }
 
 func Test_createUUID(t *testing.T) {

@@ -14,11 +14,10 @@ var Db *sql.DB
 
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "dbname=chitchat sslmode=disable")
+	Db, err = sql.Open("postgres", "user=gwp password=gwp dbname=chitchat sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
-	return
 }
 
 // create a random UUID with from RFC 4122
