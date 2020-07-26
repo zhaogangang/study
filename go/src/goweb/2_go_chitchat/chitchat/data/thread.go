@@ -1,8 +1,6 @@
 package data
 
 import (
-	"log"
-	"os"
 	"time"
 )
 
@@ -21,21 +19,6 @@ type Post struct {
 	UserId    int
 	ThreadId  int
 	CreatedAt time.Time
-}
-
-var logger *log.Logger
-func init() {
-	file, err := os.OpenFile("data.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalln("Failed to open data log file", err)
-	}
-	logger = log.New(file, "DATA", log.Ldate|log.Ltime|log.Lshortfile)
-}
-
-func checkErr(err error) {
-	if err != nil {
-		logger.Println(err)
-	}
 }
 
 func (post *Post) CreatedAtDate() string {

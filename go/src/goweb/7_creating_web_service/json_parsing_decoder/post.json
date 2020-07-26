@@ -14,7 +14,7 @@
         {
             "id" : 2, 
             "content" : "How are you today?", 
-            "author" : "Betty"
+            "Author" : "Betty"
         }
     ]
 }

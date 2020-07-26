@@ -24,16 +24,20 @@ func err(writer http.ResponseWriter, request *http.Request) {
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
+	fmt.Println(request)
 	threads, err := data.Threads()
 	if err != nil {
 		utilities.RespErrMsg(writer, request, "Cannot get threads")
 		utilities.Warning(err)
 	} else {
-		_, err := utilities.Session(writer, request)
+		m := make(map[string][]data.Thread)
+		m["thread"] = threads
+		m["hotspot"] = data.GetHotspotThreads()
+		_, err = utilities.Session(writer, request)
 		if err != nil {
-			utilities.GenerateHTML(writer, threads, "layout", "public.navbar", "index")
+			utilities.GenerateHTML(writer, m, "layout", "public.navbar", "index")
 		} else {
-			utilities.GenerateHTML(writer, threads, "layout", "private.navbar", "index")
+			utilities.GenerateHTML(writer, m, "layout", "private.navbar", "index")
 		}
 	}
 }

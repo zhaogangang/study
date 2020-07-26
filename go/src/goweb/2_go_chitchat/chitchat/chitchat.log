@@ -1,6 +1,0 @@
-ERROR 2020/07/12 22:52:20 utils.go:95: listen tcp 0.0.0.0:8080: bind: address already in use
-ERROR 2020/07/12 22:52:24 utils.go:95: listen tcp 0.0.0.0:8080: bind: address already in use
-WARNING 2020/07/12 23:14:39 utils.go:100: <nil> Failed to get cookie
-WARNING 2020/07/12 23:24:57 utils.go:100: <nil> Failed to get cookie
-INFO2020/07/12 23:25:16 utils.go:90: created user:739640715@qq.com
-WARNING 2020/07/14 00:01:04 utils.go:100: <nil> Failed to get cookie
