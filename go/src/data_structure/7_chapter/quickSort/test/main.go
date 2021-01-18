@@ -1,26 +1,16 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-)
+import "fmt"
 
 func main() {
-	var m sync.Map
+	for i := 0; i < 8; i++ {
+		fmt.Println(i)
 
-	go func() {
-		for {
-			m.Store("beijin", 100)
-			fmt.Println(m.Load("beijin"))
+		if i > 1 {
+			goto exit
 		}
-	}()
+	}
 
-	go func() {
-		for {
-			m.Store("beijin", 1000)
-			fmt.Println(m.Load("beijin"))
-		}
-	}()
-	var i int
-	fmt.Scan(&i)
+exit:
+	fmt.Println("exit.")
 }
