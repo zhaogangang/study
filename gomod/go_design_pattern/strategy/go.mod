@@ -1,4 +1,4 @@
-module iterator
+module strategy
 
 go 1.14
 

@@ -1,4 +1,4 @@
-module iterator
+module state
 
 go 1.14
 
